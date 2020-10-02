@@ -1,4 +1,6 @@
 import processing.core.PApplet;
+import processing.core.PConstants;
+import processing.core.PVector;
 
 import java.util.ArrayList;
 
@@ -14,20 +16,38 @@ public class Sketch extends PApplet {
 		fullScreen();
 	}
 
+	public void setup() {
+		textAlign(PConstants.CENTER, PConstants.CENTER);
+		textSize(Sketch.BOX_SIZE / 3f);
+
+		KEYS.init();
+
+		/*boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_UP, new PVector(width / 2f + width / 4f, height / 2f + height / 4f)));
+		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_DOWN, new PVector(width / 4f, height / 2f + height / 4f)));
+		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_LEFT, new PVector(width / 2f + width / 4f, height / 4f)));
+		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_RIGHT, new PVector(width / 4f, height / 4f)));*/
+	}
+
 	public void draw() {
 		background(0, 0, 0);
+		//boxSpeed += 0.01;
+		if(frameCount % floor(100 / boxSpeed) == 0) {
+			Box.spawn();
+			boxSpeed += 0.01;
+			boxSpeed *= 0.995;
+		}
 
-		if (boxes.size() > 0 && boxes.get(0).getArr() == Keys.getKeyPressed()) {
+		if (boxes.size() > 0 && boxes.get(0).getArr() == KEYS.getKeyPressed()) {
 			boxes.remove(0);
-			Keys.ARROW_UP = false;
-			Keys.ARROW_DOWN = false;
-			Keys.ARROW_LEFT = false;
-			Keys.ARROW_RIGHT = false;
+			KEYS.ARROW_UP.pressed = false;
+			KEYS.ARROW_DOWN.pressed = false;
+			KEYS.ARROW_LEFT.pressed = false;
+			KEYS.ARROW_RIGHT.pressed = false;
 		}
 
 		for (Box b : boxes) {
 			b.update();
-			b.show();
+			b.show(b == boxes.get(0));
 		}
 
 		for (int i = boxes.size() - 1; i >= 0; i--) {
@@ -35,24 +55,27 @@ public class Sketch extends PApplet {
 				boxes.remove(i);
 			}
 		}
+		fill(255);
+		text(frameRate, 75, 25);
+		text(boxSpeed, 75, 75);
 	}
 
 	public void mousePressed() {
-		boxes.add(new Box());
+		Box.spawn();
 	}
 
 	public void keyPressed() {
-		if (keyCode == Keys.keys.ARROW_UP.keyCode) Keys.ARROW_UP = true;
-		else if (keyCode == Keys.keys.ARROW_DOWN.keyCode) Keys.ARROW_DOWN = true;
-		else if (keyCode == Keys.keys.ARROW_LEFT.keyCode) Keys.ARROW_LEFT = true;
-		else if (keyCode == Keys.keys.ARROW_RIGHT.keyCode) Keys.ARROW_RIGHT = true;
+		KEYS k = KEYS.fromKeyCode(keyCode);
+		if (k != null) {
+			k.pressed = true;
+		}
 	}
 
 	public void keyReleased() {
-		if (keyCode == Keys.keys.ARROW_UP.keyCode) Keys.ARROW_UP = false;
-		else if (keyCode == Keys.keys.ARROW_DOWN.keyCode) Keys.ARROW_DOWN = false;
-		else if (keyCode == Keys.keys.ARROW_LEFT.keyCode) Keys.ARROW_LEFT = false;
-		else if (keyCode == Keys.keys.ARROW_RIGHT.keyCode) Keys.ARROW_RIGHT = false;
+		KEYS k = KEYS.fromKeyCode(keyCode);
+		if (k != null) {
+			k.pressed = false;
+		}
 	}
 
 	public static void main(String[] args) {
@@ -61,31 +84,5 @@ public class Sketch extends PApplet {
 	}
 }
 
-class Keys {
-	public enum keys {
-		ARROW_UP(38),
-		ARROW_DOWN(40),
-		ARROW_LEFT(37),
-		ARROW_RIGHT(39);
 
-		public int keyCode;
-
-		keys(int keyCode) {
-			this.keyCode = keyCode;
-		}
-	}
-
-	public static boolean
-			ARROW_UP = false,
-			ARROW_DOWN = false,
-			ARROW_LEFT = false,
-			ARROW_RIGHT = false;
-
-	public static Box.DIRS getKeyPressed() {
-		if (ARROW_UP && !ARROW_DOWN && !ARROW_LEFT && !ARROW_RIGHT) return Box.DIRS.UP;
-		if (!ARROW_UP && ARROW_DOWN && !ARROW_LEFT && !ARROW_RIGHT) return Box.DIRS.DOWN;
-		if (!ARROW_UP && !ARROW_DOWN && ARROW_LEFT && !ARROW_RIGHT) return Box.DIRS.LEFT;
-		if (!ARROW_UP && !ARROW_DOWN && !ARROW_LEFT && ARROW_RIGHT) return Box.DIRS.RIGHT;
-		return null;
-	}
-}
+	
