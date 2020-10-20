@@ -7,15 +7,17 @@ import java.util.ArrayList;
 public class Sketch extends PApplet {
 	public static Sketch p = new Sketch();
 
-	public static final short BOX_SIZE = 100;
+	public static short BOX_SIZE;
 
 	public static float boxSpeed = 2f;
 	public static int score = 0;
+	public static int highscore = 0;
 	public static int frame = 0;
 	public static ArrayList<Box> boxes = new ArrayList<>();
 
 	public void settings() {
 		fullScreen();
+		BOX_SIZE = (short) (displayWidth / 25);
 	}
 
 	public void setup() {
@@ -42,10 +44,10 @@ public class Sketch extends PApplet {
 			}
 		}
 		//boxSpeed += 0.01;
-		if (frame % floor(100 / boxSpeed) == 0) {
+		if (frame % floor(BOX_SIZE / boxSpeed) == 0) {
 			Box.spawn();
 			boxSpeed += 0.02;
-			frame -= floor(100 / boxSpeed);
+			frame -= floor(BOX_SIZE / boxSpeed);
 		}
 
 		if (boxes.size() > 0) {
@@ -70,12 +72,20 @@ public class Sketch extends PApplet {
 				score--;
 			}
 		}
+
+		highscore = max(score, highscore);
+
 		fill(255);
 		textSize(Sketch.BOX_SIZE / 3f);
-		text(frameRate, 75, 25);
-		text(boxSpeed, 75, 75);
-		textSize(100);
-		text(score, width / 2f, 100);
+		text(frameRate, Sketch.BOX_SIZE, Sketch.BOX_SIZE / 3f);
+		text(boxSpeed, Sketch.BOX_SIZE, Sketch.BOX_SIZE);
+
+		fill(255);
+		textSize(Sketch.BOX_SIZE / 2f);
+		text(score, width / 2f, Sketch.BOX_SIZE);
+		fill(100, 255, 100);
+		textSize(Sketch.BOX_SIZE / 3f);
+		text(highscore, width / 2f, Sketch.BOX_SIZE / 2f);
 	}
 
 	public void mousePressed() {

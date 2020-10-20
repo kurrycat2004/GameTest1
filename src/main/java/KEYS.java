@@ -12,7 +12,7 @@ public enum KEYS {
 	ARROW_RIGHT(39, new PVector(1f, 0f));
 
 	public static Sketch p = Sketch.p;
-	public static float ARROW_SIZE = 1f;
+	public static float ARROW_SIZE = Sketch.BOX_SIZE / 100f;
 
 	public int keyCode;
 	public PVector dir;
@@ -43,7 +43,7 @@ public enum KEYS {
 		body.fill(255, 0, 0);
 		body.noStroke();
 
-		body.translate(0, 10f * ARROW_SIZE);
+		body.translate(0, 10f * ARROW_SIZE - 1);
 
 		body.vertex(-arrW, -arrH);
 		body.vertex(-arrW, arrH);
