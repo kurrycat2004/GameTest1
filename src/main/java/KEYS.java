@@ -87,6 +87,13 @@ public enum KEYS {
 		return null;
 	}
 
+	public static void resetPress() {
+		ARROW_UP.pressed = false;
+		ARROW_DOWN.pressed = false;
+		ARROW_LEFT.pressed = false;
+		ARROW_RIGHT.pressed = false;
+	}
+
 	public static KEYS getKeyPressed() {
 		if (ARROW_UP.pressed && !ARROW_DOWN.pressed && !ARROW_LEFT.pressed && !ARROW_RIGHT.pressed)
 			return ARROW_UP;

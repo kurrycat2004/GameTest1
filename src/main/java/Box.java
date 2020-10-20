@@ -1,3 +1,4 @@
+import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Box {
@@ -9,7 +10,7 @@ public class Box {
 	private final KEYS arr;
 
 	public Box() {
-		this(KEYS.values()[1], KEYS.values()[(int) p.random(0, 4)]);
+		this(KEYS.values()[(int) p.random(4)], KEYS.values()[(int) p.random(4)]);
 	}
 
 	public Box(KEYS dir, KEYS arr) {
@@ -35,6 +36,7 @@ public class Box {
 	}
 
 	public void show(boolean first) {
+		p.stroke(0);
 		if (first)
 			p.fill(50, 200, 50);
 		else
@@ -75,11 +77,33 @@ public class Box {
 	}
 
 	public static PVector getStartingPosFromDir(KEYS dir) {
-		return new PVector((p.width / 2f - Sketch.BOX_SIZE / 2f) - ((p.width / 2f + Sketch.BOX_SIZE / 2f) * dir.dir.x),
-				(p.height / 2f - Sketch.BOX_SIZE / 2f) - ((p.height / 2f + Sketch.BOX_SIZE / 2f) * dir.dir.y));
+		switch (dir) {
+			case ARROW_UP:
+				return new PVector(
+						PApplet.floor(p.random(p.width - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE,
+						p.height
+				);
+			case ARROW_DOWN:
+				return new PVector(
+						PApplet.floor(p.random(p.width - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE,
+						-Sketch.BOX_SIZE
+				);
+			case ARROW_LEFT:
+				return new PVector(
+						p.width,
+						PApplet.floor(p.random(p.height - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE
+				);
+			case ARROW_RIGHT:
+				return new PVector(
+						-Sketch.BOX_SIZE,
+						PApplet.floor(p.random(p.height - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE
+				);
+			default:
+				return new PVector(0, 0);
+		}
 	}
 
-	public static void spawn(){
+	public static void spawn() {
 		Sketch.boxes.add(new Box());
 	}
 }

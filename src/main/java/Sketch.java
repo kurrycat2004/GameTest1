@@ -10,6 +10,8 @@ public class Sketch extends PApplet {
 	public static final short BOX_SIZE = 100;
 
 	public static float boxSpeed = 2f;
+	public static int score = 0;
+	public static int frame = 0;
 	public static ArrayList<Box> boxes = new ArrayList<>();
 
 	public void settings() {
@@ -29,21 +31,33 @@ public class Sketch extends PApplet {
 	}
 
 	public void draw() {
+		frame++;
 		background(0, 0, 0);
+		strokeWeight(0.2f);
+		stroke(255);
+		noFill();
+		for (int i = 0; i < width / BOX_SIZE; i++) {
+			for (int j = 0; j < height / BOX_SIZE; j++) {
+				rect(i * BOX_SIZE, j * BOX_SIZE, BOX_SIZE, BOX_SIZE);
+			}
+		}
 		//boxSpeed += 0.01;
-		if(frameCount % floor(100 / boxSpeed) == 0) {
+		if (frame % floor(100 / boxSpeed) == 0) {
 			Box.spawn();
-			boxSpeed += 0.01;
-			boxSpeed *= 0.995;
+			boxSpeed += 0.02;
+			frame -= floor(100 / boxSpeed);
 		}
 
-		if (boxes.size() > 0 && boxes.get(0).getArr() == KEYS.getKeyPressed()) {
-			boxes.remove(0);
-			KEYS.ARROW_UP.pressed = false;
-			KEYS.ARROW_DOWN.pressed = false;
-			KEYS.ARROW_LEFT.pressed = false;
-			KEYS.ARROW_RIGHT.pressed = false;
+		if (boxes.size() > 0) {
+			if (boxes.get(0).getArr() == KEYS.getKeyPressed()) {
+				boxes.remove(0);
+				score++;
+			} else if (KEYS.getKeyPressed() != null) {
+				score--;
+			}
+			KEYS.resetPress();
 		}
+
 
 		for (Box b : boxes) {
 			b.update();
@@ -53,15 +67,19 @@ public class Sketch extends PApplet {
 		for (int i = boxes.size() - 1; i >= 0; i--) {
 			if (!boxes.get(i).in(-BOX_SIZE, -BOX_SIZE, width + BOX_SIZE, height + BOX_SIZE)) {
 				boxes.remove(i);
+				score--;
 			}
 		}
 		fill(255);
+		textSize(Sketch.BOX_SIZE / 3f);
 		text(frameRate, 75, 25);
 		text(boxSpeed, 75, 75);
+		textSize(100);
+		text(score, width / 2f, 100);
 	}
 
 	public void mousePressed() {
-		Box.spawn();
+		//Box.spawn();
 	}
 
 	public void keyPressed() {
