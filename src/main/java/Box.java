@@ -10,7 +10,7 @@ public class Box {
 	private final KEYS arr;
 
 	public Box() {
-		this(KEYS.values()[(int) p.random(4)], KEYS.values()[(int) p.random(4)]);
+		this(KEYS.values()[(int) p.random(4)], KEYS.values()[(int) p.random(8)]);
 	}
 
 	public Box(KEYS dir, KEYS arr) {
