@@ -25,11 +25,6 @@ public class Sketch extends PApplet {
         textSize(Sketch.BOX_SIZE / 3f);
 
         KEYS.init();
-
-		/*boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_UP, new PVector(width / 2f + width / 4f, height / 2f + height / 4f)));
-		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_DOWN, new PVector(width / 4f, height / 2f + height / 4f)));
-		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_LEFT, new PVector(width / 2f + width / 4f, height / 4f)));
-		boxes.add(new Box(KEYS.ARROW_UP, KEYS.ARROW_RIGHT, new PVector(width / 4f, height / 4f)));*/
     }
 
     public void draw() {
@@ -43,7 +38,6 @@ public class Sketch extends PApplet {
                 rect(i * BOX_SIZE, j * BOX_SIZE, BOX_SIZE, BOX_SIZE);
             }
         }
-        //boxSpeed += 0.01;
         if (frame % floor(BOX_SIZE / boxSpeed) == 0) {
             Box.spawn();
             boxSpeed += 0.02;
@@ -51,26 +45,30 @@ public class Sketch extends PApplet {
         }
 
         if (boxes.size() > 0) {
-            if(KEYS.getKeyPressed() != null) System.out.println(KEYS.getKeyPressed());
-            if (boxes.get(0).getArr() == KEYS.getKeyPressed()) {
-                boxes.remove(0);
-                score++;
-            } else if (KEYS.getKeyPressed() != null) {
-                score--;
+            Box first = Box.getFirstBox();
+            if (first != null) {
+                if (KEYS.getKeyPressed() != null) System.out.println(KEYS.getKeyPressed());
+                if (first.getArr() == KEYS.getKeyPressed()) {
+                    first.setDisabled(true);
+                    score++;
+                } else if (KEYS.getKeyPressed() != null) {
+                    score--;
+                }
+                KEYS.resetPress();
             }
-            KEYS.resetPress();
         }
 
 
         for (Box b : boxes) {
             b.update();
-            b.show(b == boxes.get(0));
+            b.show(b == Box.getFirstBox());
         }
 
         for (int i = boxes.size() - 1; i >= 0; i--) {
             if (!boxes.get(i).in(-BOX_SIZE, -BOX_SIZE, width + BOX_SIZE, height + BOX_SIZE)) {
+                if (!boxes.get(i).isDisabled())
+                    score--;
                 boxes.remove(i);
-                score--;
             }
         }
 
