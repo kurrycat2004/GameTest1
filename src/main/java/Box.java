@@ -1,8 +1,13 @@
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.util.ArrayList;
+
 public class Box {
     public static Sketch p = Sketch.p;
+    public static float boxSpeed = 2f;
+    public static ArrayList<Box> boxes = new ArrayList<>();
+    public static short BOX_SIZE;
 
     private PVector pos;
 
@@ -41,9 +46,9 @@ public class Box {
 
     public void update() {
         if (!disabled)
-            this.pos.add(this.dir.copy().mult(Sketch.boxSpeed));
+            this.pos.add(this.dir.copy().mult(boxSpeed));
         else
-            this.pos.add(this.arr.dir.copy().mult(Sketch.boxSpeed * 10));
+            this.pos.add(this.arr.dir.copy().mult(boxSpeed * 10));
     }
 
     public void show() {
@@ -61,9 +66,9 @@ public class Box {
         } else {
             p.fill(100);
         }
-        p.rect(this.pos.x, this.pos.y, Sketch.BOX_SIZE, Sketch.BOX_SIZE);
+        p.rect(this.pos.x, this.pos.y, BOX_SIZE, BOX_SIZE);
 
-        p.shape(arr.shape, this.pos.x + Sketch.BOX_SIZE / 2f, this.pos.y + Sketch.BOX_SIZE / 2f);
+        p.shape(arr.shape, this.pos.x + BOX_SIZE / 2f, this.pos.y + BOX_SIZE / 2f);
     }
 
     public PVector getPos() {
@@ -95,23 +100,23 @@ public class Box {
         switch (dir) {
             case ARROW_UP:
                 return new PVector(
-                        PApplet.floor(p.random(p.width - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE,
+                        PApplet.floor(p.random(p.width - BOX_SIZE) / BOX_SIZE) * BOX_SIZE,
                         p.height
                 );
             case ARROW_DOWN:
                 return new PVector(
-                        PApplet.floor(p.random(p.width - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE,
-                        -Sketch.BOX_SIZE
+                        PApplet.floor(p.random(p.width - BOX_SIZE) / BOX_SIZE) * BOX_SIZE,
+                        -BOX_SIZE
                 );
             case ARROW_LEFT:
                 return new PVector(
                         p.width,
-                        PApplet.floor(p.random(p.height - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE
+                        PApplet.floor(p.random(p.height - BOX_SIZE) / BOX_SIZE) * BOX_SIZE
                 );
             case ARROW_RIGHT:
                 return new PVector(
-                        -Sketch.BOX_SIZE,
-                        PApplet.floor(p.random(p.height - Sketch.BOX_SIZE) / Sketch.BOX_SIZE) * Sketch.BOX_SIZE
+                        -BOX_SIZE,
+                        PApplet.floor(p.random(p.height - BOX_SIZE) / BOX_SIZE) * BOX_SIZE
                 );
             default:
                 return new PVector(0, 0);
@@ -119,12 +124,12 @@ public class Box {
     }
 
     public static Box getFirstBox() {
-        for (Box b : Sketch.boxes)
+        for (Box b : boxes)
             if (!b.disabled) return b;
         return null;
     }
 
     public static void spawn() {
-        Sketch.boxes.add(new Box());
+        boxes.add(new Box());
     }
 }

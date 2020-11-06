@@ -20,7 +20,6 @@ public enum KEYS {
     ARROW_DOWN_LEFT(new int[]{40, 37}, new PVector(-1f, 1f));
 
     public static Sketch p = Sketch.p;
-    public static float ARROW_SIZE = Sketch.BOX_SIZE / 100f;
 
     public int[] keyCode;
     public PVector dir;
@@ -39,6 +38,8 @@ public enum KEYS {
     }
 
     private PShape getShape() {
+        float ARROW_SIZE = Box.BOX_SIZE / 100f;
+
         float arrW = 5f * ARROW_SIZE;
         float arrH = 25f * ARROW_SIZE;
 
