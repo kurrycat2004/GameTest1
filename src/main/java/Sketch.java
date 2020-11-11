@@ -24,10 +24,9 @@ public class Sketch extends PApplet {
         textAlign(PConstants.CENTER, PConstants.CENTER);
 
         KEYS.init();
-
-
     }
 
+    // window resize handling
     public void pre() {
         if (windowWidth == width && windowHeight == height) return;
         windowWidth = width;

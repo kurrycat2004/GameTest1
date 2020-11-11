@@ -4,19 +4,12 @@ import processing.core.PVector;
 
 public enum KEYS {
     ARROW_UP(new int[]{38}, new PVector(0f, -1f)),
-
     ARROW_DOWN(new int[]{40}, new PVector(0f, 1f)),
-
     ARROW_LEFT(new int[]{37}, new PVector(-1f, 0f)),
-
     ARROW_RIGHT(new int[]{39}, new PVector(1f, 0f)),
-
     ARROW_UP_RIGHT(new int[]{38, 39}, new PVector(1f, -1f)),
-
     ARROW_UP_LEFT(new int[]{38, 37}, new PVector(-1f, -1f)),
-
     ARROW_DOWN_RIGHT(new int[]{40, 39}, new PVector(1f, 1f)),
-
     ARROW_DOWN_LEFT(new int[]{40, 37}, new PVector(-1f, 1f));
 
     public static Sketch p = Sketch.p;
@@ -137,8 +130,8 @@ public enum KEYS {
                 d - u
         );
 
-        for(KEYS k : KEYS.values()){
-            if(k.dir.equals(dir)) return k;
+        for (KEYS k : KEYS.values()) {
+            if (k.dir.equals(dir)) return k;
         }
         return null;
     }
