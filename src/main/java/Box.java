@@ -4,17 +4,16 @@ import processing.core.PVector;
 import java.util.ArrayList;
 
 public class Box {
-    public static Sketch p = Sketch.p;
+    public static final Sketch p = Sketch.p;
     public static float boxSpeed = 2f;
-    public static ArrayList<Box> boxes = new ArrayList<>();
+    public static final ArrayList<Box> boxes = new ArrayList<>();
     public static short BOX_SIZE;
 
-    private PVector pos;
+    private final PVector pos;
 
     private boolean disabled = false;
 
     private final PVector dir;
-    private final KEYS direction;
     private final KEYS arr;
 
 
@@ -23,15 +22,7 @@ public class Box {
     }
 
     public Box(KEYS dir, KEYS arr) {
-        this.direction = dir;
         this.pos = getStartingPosFromDir(dir);
-        this.dir = dir.dir;
-        this.arr = arr;
-    }
-
-    public Box(KEYS dir, KEYS arr, PVector pos) {
-        this.direction = dir;
-        this.pos = pos;
         this.dir = dir.dir;
         this.arr = arr;
     }
@@ -51,10 +42,6 @@ public class Box {
             this.pos.add(this.arr.dir.copy().mult(boxSpeed * 10));
     }
 
-    public void show() {
-        this.show(false);
-    }
-
     public void show(boolean first) {
         p.stroke(0);
         if (!disabled) {
@@ -71,20 +58,8 @@ public class Box {
         p.shape(arr.shape, this.pos.x + BOX_SIZE / 2f, this.pos.y + BOX_SIZE / 2f);
     }
 
-    public PVector getPos() {
-        return pos;
-    }
-
-    public PVector getDir() {
-        return dir;
-    }
-
     public KEYS getArr() {
         return arr;
-    }
-
-    public KEYS getDirection() {
-        return direction;
     }
 
     public boolean in(PVector pos, PVector size) {

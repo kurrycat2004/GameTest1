@@ -1,67 +1,91 @@
 import processing.core.PApplet;
 import processing.core.PConstants;
 
+import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Sketch extends PApplet {
-    public static Sketch p = new Sketch();
-    public static int windowWidth;
-    public static int windowHeight;
+	public static final Sketch p = new Sketch();
+	public static int windowWidth;
+	public static int windowHeight;
 
-    public void settings() {
-        //fullScreen();
-        size(displayWidth, displayHeight);
+	public static Screen currentScreen;
 
-        windowWidth = width;
-        windowHeight = height;
+	public void settings() {
+		//fullScreen();
+		size(displayWidth, displayHeight);
 
-        Box.BOX_SIZE = (short) (windowWidth / 25);
-        registerMethod("pre", this);
-    }
+		windowWidth = width;
+		windowHeight = height;
 
+		Box.BOX_SIZE = (short) (windowWidth / 25);
+		registerMethod("pre", this);
+	}
 
-    public void setup() {
-        surface.setResizable(true);
-        //surface.hideCursor();
-        textAlign(PConstants.CENTER, PConstants.CENTER);
+	public void setup() {
+		frameRate(60);
+		textAlign(CENTER, CENTER);
 
-        KEYS.init();
-    }
+		currentScreen = new Menu();
 
-    // window resize handling
-    public void pre() {
-        if (windowWidth == width && windowHeight == height) return;
-        windowWidth = width;
-        windowHeight = height;
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				currentScreen.update();
+			}
+		}, 0, 1000 / 60);
 
-        Box.BOX_SIZE = (short) (windowWidth / 25);
-        KEYS.init();
-    }
+		surface.setResizable(true);
+		surface.setLocation(0, 0);
+		javax.swing.JFrame jframe = (javax.swing.JFrame) ((processing.awt.PSurfaceAWT.SmoothCanvas) surface.getNative()).getFrame();
+		jframe.setExtendedState(jframe.getExtendedState() | Frame.MAXIMIZED_BOTH);
 
-    public void draw() {
-        GameLoop.draw();
-    }
+		textAlign(PConstants.CENTER, PConstants.CENTER);
 
-    public void mousePressed() {
-        //Box.spawn();
-    }
+		KEYS.init();
+	}
 
-    public void keyPressed() {
-        KEYS k = KEYS.fromKeyCode(keyCode);
-        if (k != null) {
-            k.pressed = true;
-        }
-    }
+	// window resize handling
+	@SuppressWarnings("unused")
+	public void pre() {
+		if (windowWidth == width && windowHeight == height) return;
+		windowWidth = width;
+		windowHeight = height;
 
-    public void keyReleased() {
-        KEYS k = KEYS.fromKeyCode(keyCode);
-        if (k != null) {
-            k.pressed = false;
-        }
-    }
+		Box.BOX_SIZE = (short) (windowWidth / 25);
+		KEYS.init();
+	}
 
-    public static void main(String[] args) {
-        String[] processingArgs = {"Sketch"};
-        PApplet.runSketch(processingArgs, p);
-    }
+	public void draw() {
+		currentScreen.draw();
+	}
+
+	public void mousePressed() {
+		//Box.spawn();
+	}
+
+	public void keyPressed() {
+		KEYS k = KEYS.fromKeyCode(keyCode);
+		if (k != null) {
+			if (!KEYS.keysPressed.contains(k))
+				KEYS.keysPressed.add(k);
+			if (!KEYS.nextMoveKeys.contains(k))
+				KEYS.nextMoveKeys.add(k);
+		}
+	}
+
+	public void keyReleased() {
+		KEYS k = KEYS.fromKeyCode(keyCode);
+		if (k != null)
+			KEYS.keysPressed.remove(k);
+	}
+
+	public static void main(String[] args) {
+		String[] processingArgs = {"Sketch"};
+		PApplet.runSketch(processingArgs, p);
+	}
 }
 
 
