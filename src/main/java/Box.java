@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Box {
     public static final Sketch p = Sketch.p;
-    public static float boxSpeed = 2f;
+    public static float boxSpeed = 1f;
     public static final ArrayList<Box> boxes = new ArrayList<>();
     public static short BOX_SIZE;
 
