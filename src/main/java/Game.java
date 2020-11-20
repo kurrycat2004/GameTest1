@@ -1,6 +1,8 @@
 import processing.core.PApplet;
 
 public class Game extends Screen {
+    public static final Game instance = new Game();
+
     public final Sketch p = Sketch.p;
     public int score = 0;
     public int highscore = 0;
@@ -9,18 +11,20 @@ public class Game extends Screen {
     public Box first;
     public Thread spawnBoxThread;
 
-    Game(){
+    Game() {
         spawnBoxThread = new Thread(() -> {
-           while(!spawnBoxThread.isInterrupted()){
-               Box.spawn();
-               Box.boxSpeed += 0.02;
-               try {
-                   Thread.sleep((long) (1000 / Box.boxSpeed));
-               } catch(InterruptedException ignored){
-
-               }
-           }
+            while (!spawnBoxThread.isInterrupted()) {
+                Box.spawn();
+                Box.boxSpeed += 0.02;
+                try {
+                    Thread.sleep((long) (1000 / Box.boxSpeed));
+                } catch (InterruptedException ignored) {
+                }
+            }
         });
+    }
+
+    public void start() {
         spawnBoxThread.start();
     }
 

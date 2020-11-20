@@ -24,10 +24,14 @@ public class Sketch extends PApplet {
 	}
 
 	public void setup() {
+	    ConfigHandler.init();
+	    ConfigHandler.loadConfig();
+
+
 		frameRate(60);
 		textAlign(CENTER, CENTER);
 
-		currentScreen = new Menu();
+		currentScreen = Menu.instance;
 
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
