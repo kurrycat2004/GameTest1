@@ -5,7 +5,6 @@ import processing.event.KeyEvent;
 import java.util.ArrayList;
 
 public abstract class Screen {
-	public static Sketch p = Sketch.p;
 	protected static ArrayList<Screen> screens = new ArrayList<>();
 
 	public ArrayList<Button> buttonList = new ArrayList<>();

@@ -6,7 +6,6 @@ import processing.core.PVector;
 import java.util.ArrayList;
 
 public class Box {
-	public static final Sketch p = Sketch.p;
 	public static float boxSpeed = 1f;
 	public static final ArrayList<Box> boxes = new ArrayList<>();
 	public static short BOX_SIZE;
@@ -20,7 +19,7 @@ public class Box {
 
 
 	public Box() {
-		this(KEYS.values()[(int) p.random(4)], KEYS.values()[(int) p.random(8)]);
+		this(KEYS.values()[(int) Sketch.p.random(4)], KEYS.values()[(int) Sketch.p.random(8)]);
 	}
 
 	public Box(KEYS dir, KEYS arr) {
@@ -41,23 +40,24 @@ public class Box {
 		if (!disabled)
 			this.pos.add(this.dir.copy().mult(boxSpeed));
 		else
-			this.pos.add(this.arr.dir.copy().mult(boxSpeed * 10));
+			this.pos.add(this.arr.dir.copy().mult(boxSpeed * 20));
 	}
 
 	public void show(boolean first) {
-		p.stroke(0);
+		Sketch.p.strokeWeight(1);
+		Sketch.p.stroke(0);
 		if (!disabled) {
 			if (first)
-				p.fill(50, 200, 50);
+				Sketch.p.fill(50, 200, 50);
 			else
-				p.fill(255);
+				Sketch.p.fill(255);
 
 		} else {
-			p.fill(100);
+			Sketch.p.fill(100);
 		}
-		p.rect(this.pos.x, this.pos.y, BOX_SIZE, BOX_SIZE);
+		Sketch.p.rect(this.pos.x, this.pos.y, BOX_SIZE, BOX_SIZE, 10, 10, 10, 10);
 
-		p.shape(arr.shape, this.pos.x + BOX_SIZE / 2f, this.pos.y + BOX_SIZE / 2f);
+		Sketch.p.shape(arr.shape, this.pos.x + BOX_SIZE / 2f, this.pos.y + BOX_SIZE / 2f);
 	}
 
 	public KEYS getArr() {
@@ -75,14 +75,14 @@ public class Box {
 
 	public static PVector getStartingPosFromDir(KEYS dir) {
 		int x;
-		if (dir == KEYS.ARROW_LEFT) x = p.width;
+		if (dir == KEYS.ARROW_LEFT) x = Sketch.p.width;
 		else if (dir == KEYS.ARROW_RIGHT) x = -BOX_SIZE;
-		else x = PApplet.floor(p.random(p.width - BOX_SIZE) / BOX_SIZE) * BOX_SIZE;
+		else x = PApplet.floor(Sketch.p.random(Sketch.p.width - BOX_SIZE) / BOX_SIZE) * BOX_SIZE;
 
 		int y;
-		if (dir == KEYS.ARROW_UP) y = p.height;
+		if (dir == KEYS.ARROW_UP) y = Sketch.p.height;
 		else if (dir == KEYS.ARROW_DOWN) y = -BOX_SIZE;
-		else y = PApplet.floor(p.random(p.height - BOX_SIZE) / BOX_SIZE) * BOX_SIZE;
+		else y = PApplet.floor(Sketch.p.random(Sketch.p.height - BOX_SIZE) / BOX_SIZE) * BOX_SIZE;
 
 		return new PVector(x, y);
 	}

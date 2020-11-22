@@ -1,9 +1,6 @@
 package io.github.kurrycat.arrows.Screens;
 
-import io.github.kurrycat.arrows.Box;
-import io.github.kurrycat.arrows.KEYS;
-import io.github.kurrycat.arrows.Screen;
-import io.github.kurrycat.arrows.ScreenHandler;
+import io.github.kurrycat.arrows.*;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.event.KeyEvent;
@@ -20,7 +17,6 @@ public class Game extends Screen {
 	public int score = 0;
 	public int highscore = 0;
 	public int roundHighscore = 0;
-	public int frame = 0;
 
 	public Box first;
 	public Thread spawnBoxThread;
@@ -40,10 +36,11 @@ public class Game extends Screen {
 	}
 
 	public void update() {
-		if (score < roundHighscore - 10) {
+		if (score <= roundHighscore - 5) {
 			stop();
 			ScreenHandler.pushScreen(GameOver.instance);
 		}
+		//ArrowKeys
 
 		if (first == null || first.isDisabled()) first = Box.getFirstBox();
 
@@ -68,7 +65,7 @@ public class Game extends Screen {
 		}
 
 		for (int i = Box.boxes.size() - 1; i >= 0; i--) {
-			if (!Box.boxes.get(i).in(-Box.BOX_SIZE, -Box.BOX_SIZE, p.width + Box.BOX_SIZE, p.height + Box.BOX_SIZE)) {
+			if (!Box.boxes.get(i).in(-Box.BOX_SIZE, -Box.BOX_SIZE, Sketch.p.width + Box.BOX_SIZE, Sketch.p.height + Box.BOX_SIZE)) {
 				if (!Box.boxes.get(i).isDisabled())
 					score--;
 				Box removed = Box.boxes.remove(i);
@@ -78,13 +75,13 @@ public class Game extends Screen {
 	}
 
 	public void draw() {
-		frame++;
-		p.background(0);
-		p.strokeWeight(0.2f);
-		p.stroke(255);
-		p.noFill();
+		ScreenHandler.drawBackground(0);
 
-		/*for (int i = 0; i < p.width / Box.BOX_SIZE; i++) {
+		/*Sketch.p.strokeWeight(0.2f);
+		Sketch.p.stroke(255);
+		Sketch.p.noFill();
+
+		for (int i = 0; i < p.width / Box.BOX_SIZE; i++) {
 			for (int j = 0; j < p.height / Box.BOX_SIZE; j++) {
 				p.rect(i * Box.BOX_SIZE, j * Box.BOX_SIZE, Box.BOX_SIZE, Box.BOX_SIZE);
 			}
@@ -94,20 +91,25 @@ public class Game extends Screen {
 			Box.boxes.get(i).show(Box.boxes.get(i) == first);
 		}
 
-		p.fill(255);
+		Sketch.p.fill(255);
 
-		p.textFont(scoreFont);
+		Sketch.p.textFont(scoreFont);
 
-		p.textSize(Box.BOX_SIZE / 3f);
-		p.text(p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
-		p.text(Box.boxSpeed, Box.BOX_SIZE, Box.BOX_SIZE);
+		Sketch.p.textSize(Box.BOX_SIZE / 3f);
 
-		p.textSize(Box.BOX_SIZE / 2f);
-		p.text(score, p.width / 2f, Box.BOX_SIZE);
+		if (Settings.showFPS)
+			Sketch.p.showFPS();
 
-		p.fill(100, 255, 100);
-		p.textSize(Box.BOX_SIZE / 3f);
-		p.text(highscore, p.width / 2f, Box.BOX_SIZE / 2f);
+		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
+		Sketch.p.text(Box.boxSpeed, Box.BOX_SIZE, Box.BOX_SIZE);
+		Sketch.p.text(Box.boxes.size(), Box.BOX_SIZE, Box.BOX_SIZE * 2);
+
+		Sketch.p.textSize(Box.BOX_SIZE / 2f);
+		Sketch.p.text(score, Sketch.p.width / 2f, Box.BOX_SIZE);
+
+		Sketch.p.fill(100, 255, 100);
+		Sketch.p.textSize(Box.BOX_SIZE / 3f);
+		Sketch.p.text(highscore, Sketch.p.width / 2f, Box.BOX_SIZE / 2f);
 	}
 
 	public void stop() {

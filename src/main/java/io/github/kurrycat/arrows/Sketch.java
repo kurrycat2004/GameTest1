@@ -2,12 +2,10 @@ package io.github.kurrycat.arrows;
 
 import io.github.kurrycat.arrows.Screens.Menu;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PFont;
 import processing.event.KeyEvent;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
@@ -15,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Sketch extends PApplet {
-	public static final Sketch p = new Sketch();
+	public static Sketch p = new Sketch();
 	public static int windowWidth;
 	public static int windowHeight;
 
@@ -23,15 +21,11 @@ public class Sketch extends PApplet {
 
 	public static int font = 0;
 
-	//TODO: fullscreen broken (black bar)
-
 	public void settings() {
 		ConfigHandler.init();
 		ConfigHandler.loadConfig();
 		ScreenHandler.loadAllScreens();
 
-		/*if (Settings.fullscreen) fullScreen();
-		else*/
 		size(displayWidth, displayHeight);
 
 		windowWidth = width;
@@ -52,54 +46,27 @@ public class Sketch extends PApplet {
 			}
 		});
 
-		width = jframe.getWidth();
-		height = jframe.getHeight();
-
-		updateFullscreen();
+		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jframe.setResizable(true);
+		jframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		System.out.println(Arrays.toString(PFont.list()));
 
-		frameRate(60);
+		frameRate(360);
 		textAlign(CENTER, CENTER);
 
-		ScreenHandler.pushScreen(Menu.instance);
+		ScreenHandler.pushScreen(Menu.instance, false);
+
+		KEYS.init();
 
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				ScreenHandler.getCurrentScreen().update();
+				ScreenHandler.update();
 			}
 		}, 0, 1000 / 60);
-
-
-		textAlign(PConstants.CENTER, PConstants.CENTER);
-
-		KEYS.init();
-	}
-
-	public void updateFullscreen() {
-		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-
-		if (!Settings.fullscreen) {
-			device.setFullScreenWindow(null);
-			jframe.dispose();
-			jframe.setUndecorated(Settings.fullscreen);
-			jframe.setResizable(true);
-			jframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		} else {
-			jframe.dispose();
-			jframe.setUndecorated(Settings.fullscreen);
-			jframe.setResizable(false);
-			device.setFullScreenWindow(jframe);
-		}
-		jframe.setVisible(true);
-		onResize();
-
-		width = jframe.getWidth();
-		height = jframe.getHeight();
-		/*jframe.setResizable(!Settings.fullscreen);
-		jframe.setExtendedState(JFrame.MAXIMIZED_BOTH);*/
 	}
 
 	public static void message(String message) {
@@ -117,9 +84,9 @@ public class Sketch extends PApplet {
 	// window resize handling
 	@SuppressWarnings("unused")
 	public void pre() {
-		if (windowWidth == jframe.getWidth() && windowHeight == jframe.getHeight()) return;
-		windowWidth = jframe.getWidth();
-		windowHeight = jframe.getHeight();
+		if (windowWidth == width && windowHeight == height) return;
+		windowWidth = width;
+		windowHeight = height;
 
 		onResize();
 	}
@@ -137,10 +104,17 @@ public class Sketch extends PApplet {
 		ScreenHandler.getCurrentScreen().draw();
 	}
 
+	public void showFPS() {
+		Sketch.p.textSize(Box.BOX_SIZE / 3f);
+		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
+	}
+
 	public void mousePressed() {
-		/*font++;
-		System.out.println(PFont.list()[Sketch.font % PFont.list().length]);*/
-		//io.github.kurrycat.arrows.Box.spawn();
+		/*if (mouseButton == LEFT)
+			font++;
+		else if (mouseButton == RIGHT)
+			font--;
+		System.out.println(Arrays.asList("Forte", "Monospaced.bolditalic", "OCR A Extended").get(Sketch.font % 3));*/
 	}
 
 

@@ -3,15 +3,25 @@ package io.github.kurrycat.arrows;
 import processing.core.PFont;
 
 public class Button {
-	public static Sketch p = Sketch.p;
-	public PFont font = new PFont(PFont.findFont("Candara"), true);
+	public static final PFont defaultFont = new PFont(PFont.findFont("Candara"), true);
+	protected PFont font = defaultFont;
 
-	private String text;
-	private int x, y;
-	private int width, height;
+	protected String text;
+	protected int x, y;
+	protected int width, height;
 
-	private Runnable clicked;
-	private boolean pressing = false;
+	protected Integer bgColor = null;
+	protected Integer strokeColor = null;
+	protected Integer textColor = Sketch.p.color(0);
+	protected Float strokeWeight = 1f;
+
+	protected Integer hoverBgColor = null;
+	protected Integer hoverStrokeColor = Sketch.p.color(200);
+	protected Integer hoverTextColor = Sketch.p.color(0);
+	protected Float hoverStrokeWeight = 4f;
+
+	protected Runnable clicked;
+	protected boolean pressing = false;
 
 	public Button(String text, int x, int y, int width, int height) {
 		this.text = text;
@@ -22,7 +32,7 @@ public class Button {
 	}
 
 	public static Button middleOffset(String text, int xOff, int yOff, int width, int height) {
-		return new Button(text, p.width / 2 - width / 2 + xOff, p.height / 2 - height / 2 + yOff, width, height);
+		return new Button(text, Sketch.p.width / 2 - width / 2 + xOff, Sketch.p.height / 2 - height / 2 + yOff, width, height);
 	}
 
 	public void setClickedCallback(Runnable r) {
@@ -34,27 +44,41 @@ public class Button {
 	}
 
 	public void draw() {
+		boolean hover = contains(Sketch.p.mouseX, Sketch.p.mouseY);
+
+		Integer strokeColor = hover ? hoverStrokeColor : this.strokeColor;
+		Integer bgColor = hover ? hoverBgColor : this.bgColor;
+		Integer textColor = hover ? hoverTextColor : this.textColor;
+		Float strokeWeight = hover ? hoverStrokeWeight : this.strokeWeight;
+		if (strokeWeight == null) strokeWeight = 1f;
+
 		//Fonts: "Book Antiqua Fett", "Bookman Old Style", Bookman Old Style Fett", "Bookman Old Style Fett"
 		//"Bookman Old Style Fett Kursiv", "Candara", "DejaVu Sans Mono"
 
 		/*PFont font = new PFont(PFont.findFont(PFont.list()[io.github.kurrycat.arrows.Sketch.font % PFont.list().length]), true);
 		p.textFont(font, 20);*/
 
-		p.textFont(font);
-		p.textSize(height / 2f);
+		Sketch.p.textFont(font);
+		Sketch.p.textSize(height / 2f);
 
-		p.noStroke();
-		p.fill(255);
-		if (contains(p.mouseX, p.mouseY))
-			p.fill(200);
-		p.rect(x, y, width, height, 10, 10, 10, 10);
-		p.fill(0);
-		p.text(text, x + (int) (width / 2D), y + (int) (height / 2D));
+		if (strokeColor == null) Sketch.p.noStroke();
+		else Sketch.p.stroke(strokeColor);
+
+		if (bgColor == null) Sketch.p.noFill();
+		else Sketch.p.fill(bgColor);
+
+		Sketch.p.strokeWeight(strokeWeight);
+
+		Sketch.p.rect(x, y, width, height, 10, 10, 10, 10);
+
+		if (textColor == null) Sketch.p.noFill();
+		else Sketch.p.fill(textColor);
+		Sketch.p.text(text, x + (int) (width / 2D), y + (int) (height / 2D));
 	}
 
 	public void update() {
-		if (contains(p.mouseX, p.mouseY)) {
-			if (p.mousePressed)
+		if (contains(Sketch.p.mouseX, Sketch.p.mouseY)) {
+			if (Sketch.p.mousePressed)
 				pressing = true;
 			else if (pressing) {
 				if (clicked != null)
@@ -62,7 +86,7 @@ public class Button {
 				pressing = false;
 			}
 		} else {
-			if (pressing && !p.mousePressed) pressing = false;
+			if (pressing && !Sketch.p.mousePressed) pressing = false;
 		}
 	}
 
@@ -88,8 +112,8 @@ public class Button {
 	}
 
 	public Button setMiddleOffsetPos(int xOff, int yOff) {
-		setX(p.width / 2 - width / 2 + xOff);
-		setY(p.height / 2 - height / 2 + yOff);
+		setX(Sketch.p.width / 2 - width / 2 + xOff);
+		setY(Sketch.p.height / 2 - height / 2 + yOff);
 		return this;
 	}
 
@@ -100,6 +124,63 @@ public class Button {
 
 	public Button setHeight(int height) {
 		this.height = height;
+		return this;
+	}
+
+	public Button setBgColor(Integer bgColor) {
+		this.bgColor = bgColor;
+		return this;
+	}
+
+	public Button setStrokeColor(Integer strokeColor) {
+		this.strokeColor = strokeColor;
+		return this;
+	}
+
+	public Button setTextColor(Integer textColor) {
+		this.textColor = textColor;
+		return this;
+	}
+
+	public Button setStrokeWeight(Float strokeWeight) {
+		this.strokeWeight = strokeWeight;
+		return this;
+	}
+
+	public Button setHoverBgColor(Integer hoverBgColor) {
+		this.hoverBgColor = hoverBgColor;
+		return this;
+	}
+
+	public Button setHoverStrokeColor(Integer hoverStrokeColor) {
+		this.hoverStrokeColor = hoverStrokeColor;
+		return this;
+	}
+
+	public Button setHoverTextColor(Integer hoverTextColor) {
+		this.hoverTextColor = hoverTextColor;
+		return this;
+	}
+
+	public Button setHoverStrokeWeight(Float hoverStrokeWeight) {
+		this.hoverStrokeWeight = hoverStrokeWeight;
+		return this;
+	}
+
+	public Button setFont(PFont font) {
+		this.font = font;
+		return this;
+	}
+
+	public Button copyDesign(Button button) {
+		bgColor = button.bgColor;
+		hoverBgColor = button.hoverBgColor;
+		textColor = button.textColor;
+		hoverTextColor = button.hoverTextColor;
+		strokeColor = button.strokeColor;
+		hoverStrokeColor = button.hoverStrokeColor;
+		strokeWeight = button.strokeWeight;
+		hoverStrokeWeight = button.hoverStrokeWeight;
 		return this;
 	}
 }

@@ -16,7 +16,6 @@ public enum KEYS {
 	ARROW_DOWN_RIGHT(new int[]{40, 39}, new PVector(1f, 1f)),
 	ARROW_DOWN_LEFT(new int[]{40, 37}, new PVector(-1f, 1f));
 
-	public static final Sketch p = Sketch.p;
 	public static final ArrayList<KEYS> keysPressed = new ArrayList<>();
 	public static final ArrayList<KEYS> nextMoveKeys = new ArrayList<>();
 
@@ -46,7 +45,7 @@ public enum KEYS {
 		float arrR = 20f * ARROW_SIZE;
 
 		//BODY
-		PShape body = p.createShape();
+		PShape body = Sketch.p.createShape();
 		body.beginShape();
 		body.fill(255, 0, 0);
 		body.noStroke();
@@ -61,7 +60,7 @@ public enum KEYS {
 		body.endShape(PConstants.CLOSE);
 
 		//ARROW
-		PShape arrow = p.createShape();
+		PShape arrow = Sketch.p.createShape();
 		arrow.beginShape();
 		arrow.fill(255, 0, 0);
 		arrow.noStroke();
@@ -74,7 +73,7 @@ public enum KEYS {
 
 		arrow.endShape(PConstants.CLOSE);
 
-		PShape s = p.createShape(PConstants.GROUP);
+		PShape s = Sketch.p.createShape(PConstants.GROUP);
 		s.addChild(arrow);
 		s.addChild(body);
 

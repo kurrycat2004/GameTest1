@@ -1,15 +1,13 @@
 package io.github.kurrycat.arrows.Screens;
 
-import io.github.kurrycat.arrows.Box;
-import io.github.kurrycat.arrows.Button;
-import io.github.kurrycat.arrows.Screen;
-import io.github.kurrycat.arrows.ScreenHandler;
+import io.github.kurrycat.arrows.*;
 import processing.event.KeyEvent;
 
 public class GameOver extends Screen {
 	public static final GameOver instance = new GameOver();
 
 	private final Button restart = Button.middleOffset("Restart", 0, 0, 140, 40);
+	private final Button menu = Button.middleOffset("Menu", 0, 0, 140, 40);
 
 	static {
 		screens.add(instance);
@@ -21,6 +19,21 @@ public class GameOver extends Screen {
 			ScreenHandler.pushScreen(Game.instance);
 			Game.instance.start();
 		});
+
+		restart.setBgColor(Sketch.p.color(100))
+				.setHoverBgColor(Sketch.p.color(100))
+				.setStrokeColor(null)
+				.setHoverStrokeColor(Sketch.p.color(200));
+
+		buttonList.add(menu);
+		menu.setClickedCallback(() -> {
+			ScreenHandler.pushScreen(Menu.instance);
+		});
+
+		menu.setBgColor(Sketch.p.color(100))
+				.setHoverBgColor(Sketch.p.color(100))
+				.setStrokeColor(null)
+				.setHoverStrokeColor(Sketch.p.color(200));
 	}
 
 	@Override
@@ -30,6 +43,7 @@ public class GameOver extends Screen {
 
 	public void windowResized() {
 		restart.setMiddleOffsetPos(0, 0);
+		menu.setMiddleOffsetPos(0, 50);
 	}
 
 	public void init() {
@@ -46,13 +60,14 @@ public class GameOver extends Screen {
 
 	public void draw() {
 		Game.instance.draw();
-		p.fill(0, 0, 0, 100);
-		p.rect(0, 0, p.width, p.height);
 
-		p.noStroke();
-		p.fill(100, 255, 100);
-		p.textSize(Box.BOX_SIZE / 3f);
-		p.text(Game.instance.roundHighscore, p.width / 2f, p.height / 2f - Box.BOX_SIZE * 2f);
+		Sketch.p.fill(0, 0, 0, 100);
+		Sketch.p.rect(0, 0, Sketch.p.width, Sketch.p.height);
+
+		Sketch.p.noStroke();
+		Sketch.p.fill(100, 255, 100);
+		Sketch.p.textSize(Box.BOX_SIZE / 3f);
+		Sketch.p.text(Game.instance.roundHighscore, Sketch.p.width / 2f, Sketch.p.height / 2f - Box.BOX_SIZE * 2f);
 
 		drawButtons();
 	}
