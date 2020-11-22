@@ -5,7 +5,7 @@
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="GameTest1" />
+      <element id="module-output" name="Arrows" />
       <element id="extracted-dir" path="$PROJECT_DIR$/src/main/resources/processing/core.jar" path-in-jar="/" />
     </root>
   </artifact>
