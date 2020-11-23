@@ -6,8 +6,8 @@ import processing.event.KeyEvent;
 public class GameOver extends Screen {
 	public static final GameOver instance = new GameOver();
 
-	private final Button restart = Button.middleOffset("Restart", 0, 0, 140, 40);
-	private final Button menu = Button.middleOffset("Menu", 0, 0, 140, 40);
+	private final Button restart = Button.middleOffset("Restart", 0, 0, 140, 40).copyDesign(Menu.mainDesign);
+	private final Button menu = Button.middleOffset("Menu", 0, 0, 140, 40).copyDesign(Menu.mainDesign);
 
 	static {
 		screens.add(instance);
@@ -20,20 +20,10 @@ public class GameOver extends Screen {
 			Game.instance.start();
 		});
 
-		restart.setBgColor(Sketch.p.color(100))
-				.setHoverBgColor(Sketch.p.color(100))
-				.setStrokeColor(null)
-				.setHoverStrokeColor(Sketch.p.color(200));
-
 		buttonList.add(menu);
 		menu.setClickedCallback(() -> {
 			ScreenHandler.pushScreen(Menu.instance);
 		});
-
-		menu.setBgColor(Sketch.p.color(100))
-				.setHoverBgColor(Sketch.p.color(100))
-				.setStrokeColor(null)
-				.setHoverStrokeColor(Sketch.p.color(200));
 	}
 
 	@Override

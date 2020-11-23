@@ -10,13 +10,12 @@ public class Box {
 	public static final ArrayList<Box> boxes = new ArrayList<>();
 	public static short BOX_SIZE;
 
-	private final PVector pos;
+	protected final PVector pos;
 
-	private boolean disabled = false;
+	protected boolean disabled = false;
 
-	private final PVector dir;
-	private final KEYS arr;
-
+	protected final PVector dir;
+	protected final KEYS arr;
 
 	public Box() {
 		this(KEYS.values()[(int) Sketch.p.random(4)], KEYS.values()[(int) Sketch.p.random(8)]);
@@ -24,6 +23,12 @@ public class Box {
 
 	public Box(KEYS dir, KEYS arr) {
 		this.pos = getStartingPosFromDir(dir);
+		this.dir = dir.dir;
+		this.arr = arr;
+	}
+
+	public Box(KEYS dir, KEYS arr, PVector pos) {
+		this.pos = pos.copy();
 		this.dir = dir.dir;
 		this.arr = arr;
 	}
@@ -51,7 +56,6 @@ public class Box {
 				Sketch.p.fill(50, 200, 50);
 			else
 				Sketch.p.fill(255);
-
 		} else {
 			Sketch.p.fill(100);
 		}
@@ -71,6 +75,10 @@ public class Box {
 
 	public boolean in(int posX, int posY, int sizeX, int sizeY) {
 		return in(new PVector(posX, posY), new PVector(sizeX, sizeY));
+	}
+
+	public boolean onScreen() {
+		return in(-Box.BOX_SIZE, -Box.BOX_SIZE, Sketch.p.width + Box.BOX_SIZE, Sketch.p.height + Box.BOX_SIZE);
 	}
 
 	public static PVector getStartingPosFromDir(KEYS dir) {

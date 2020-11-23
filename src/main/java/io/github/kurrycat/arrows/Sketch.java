@@ -1,14 +1,13 @@
 package io.github.kurrycat.arrows;
 
+import io.github.kurrycat.arrows.Screens.Game;
 import io.github.kurrycat.arrows.Screens.Menu;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.event.KeyEvent;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,8 +17,6 @@ public class Sketch extends PApplet {
 	public static int windowHeight;
 
 	public static JFrame jframe;
-
-	public static int font = 0;
 
 	public void settings() {
 		ConfigHandler.init();
@@ -50,8 +47,6 @@ public class Sketch extends PApplet {
 		jframe.setResizable(true);
 		jframe.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		System.out.println(Arrays.toString(PFont.list()));
-
 		frameRate(360);
 		textAlign(CENTER, CENTER);
 
@@ -67,6 +62,12 @@ public class Sketch extends PApplet {
 				ScreenHandler.update();
 			}
 		}, 0, 1000 / 60);
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				ConfigHandler.saveConfig();
+			}
+		}, 0, 120_000 /* 2min */);
 	}
 
 	public static void message(String message) {
@@ -101,22 +102,19 @@ public class Sketch extends PApplet {
 	}
 
 	public void draw() {
-		ScreenHandler.getCurrentScreen().draw();
+		ScreenHandler.drawCurrentScreen();
 	}
 
 	public void showFPS() {
+		Sketch.p.fill(255);
+		Sketch.p.textFont(Game.scoreFont);
 		Sketch.p.textSize(Box.BOX_SIZE / 3f);
 		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
 	}
 
 	public void mousePressed() {
-		/*if (mouseButton == LEFT)
-			font++;
-		else if (mouseButton == RIGHT)
-			font--;
-		System.out.println(Arrays.asList("Forte", "Monospaced.bolditalic", "OCR A Extended").get(Sketch.font % 3));*/
-	}
 
+	}
 
 	public void keyPressed() {
 		KEYS k = KEYS.fromKeyCode(keyCode);

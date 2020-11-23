@@ -54,6 +54,8 @@ public class Game extends Screen {
 					score--;
 				}
 				KEYS.nextMoveKeys.clear();
+			} else if (keysPressed == null && KEYS.keysPressed.isEmpty()) {
+				KEYS.nextMoveKeys.clear();
 			}
 		}
 
@@ -65,7 +67,7 @@ public class Game extends Screen {
 		}
 
 		for (int i = Box.boxes.size() - 1; i >= 0; i--) {
-			if (!Box.boxes.get(i).in(-Box.BOX_SIZE, -Box.BOX_SIZE, Sketch.p.width + Box.BOX_SIZE, Sketch.p.height + Box.BOX_SIZE)) {
+			if (!Box.boxes.get(i).onScreen()) {
 				if (!Box.boxes.get(i).isDisabled())
 					score--;
 				Box removed = Box.boxes.remove(i);
@@ -102,7 +104,6 @@ public class Game extends Screen {
 
 		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
 		Sketch.p.text(Box.boxSpeed, Box.BOX_SIZE, Box.BOX_SIZE);
-		Sketch.p.text(Box.boxes.size(), Box.BOX_SIZE, Box.BOX_SIZE * 2);
 
 		Sketch.p.textSize(Box.BOX_SIZE / 2f);
 		Sketch.p.text(score, Sketch.p.width / 2f, Box.BOX_SIZE);

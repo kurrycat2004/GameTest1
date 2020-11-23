@@ -35,11 +35,13 @@ public class SettingsScreen extends Screen {
 	}
 
 	public void draw() {
-		Sketch.p.background(0);
+		ScreenHandler.drawBackground(0);
+		ScreenHandler.drawArrows();
 		drawButtons();
 	}
 
 	public void update() {
 		updateButtons();
+		ScreenHandler.updateArrows();
 	}
 }

@@ -1,12 +1,17 @@
 package io.github.kurrycat.arrows;
 
 import processing.core.PFont;
+import processing.core.PShape;
+import processing.core.PVector;
+
+import java.util.function.Supplier;
 
 public class Button {
 	public static final PFont defaultFont = new PFont(PFont.findFont("Candara"), true);
 	protected PFont font = defaultFont;
 
 	protected String text;
+	protected PShape shape;
 	protected int x, y;
 	protected int width, height;
 
@@ -21,7 +26,17 @@ public class Button {
 	protected Float hoverStrokeWeight = 4f;
 
 	protected Runnable clicked;
+	protected Runnable drawMethod;
+	protected Supplier<Boolean> hoverMethod;
+
 	protected boolean pressing = false;
+
+	public Button(int x, int y, int width, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
 
 	public Button(String text, int x, int y, int width, int height) {
 		this.text = text;
@@ -35,8 +50,24 @@ public class Button {
 		return new Button(text, Sketch.p.width / 2 - width / 2 + xOff, Sketch.p.height / 2 - height / 2 + yOff, width, height);
 	}
 
-	public void setClickedCallback(Runnable r) {
+	public Button setClickedCallback(Runnable r) {
 		clicked = r;
+		return this;
+	}
+
+	public Button setDrawMethod(Runnable r) {
+		drawMethod = r;
+		return this;
+	}
+
+	public Button setHoverMethod(Supplier<Boolean> r) {
+		hoverMethod = r;
+		return this;
+	}
+
+	public Button setShape(PShape shape) {
+		this.shape = shape;
+		return this;
 	}
 
 	public boolean contains(int x, int y) {
@@ -44,19 +75,26 @@ public class Button {
 	}
 
 	public void draw() {
-		boolean hover = contains(Sketch.p.mouseX, Sketch.p.mouseY);
+		//Fonts: "Book Antiqua Fett", "Bookman Old Style", Bookman Old Style Fett", "Bookman Old Style Fett"
+		//"Bookman Old Style Fett Kursiv", "Candara", "DejaVu Sans Mono"
+
+		/*PFont font = new PFont(PFont.findFont(PFont.list()[io.github.kurrycat.arrows.Sketch.font % PFont.list().length]), true);
+		p.textFont(font, 20);*/
+
+		if (drawMethod != null) {
+			drawMethod.run();
+			return;
+		}
+
+		boolean hover;
+		if (hoverMethod == null) hover = contains(Sketch.p.mouseX, Sketch.p.mouseY);
+		else hover = hoverMethod.get();
 
 		Integer strokeColor = hover ? hoverStrokeColor : this.strokeColor;
 		Integer bgColor = hover ? hoverBgColor : this.bgColor;
 		Integer textColor = hover ? hoverTextColor : this.textColor;
 		Float strokeWeight = hover ? hoverStrokeWeight : this.strokeWeight;
 		if (strokeWeight == null) strokeWeight = 1f;
-
-		//Fonts: "Book Antiqua Fett", "Bookman Old Style", Bookman Old Style Fett", "Bookman Old Style Fett"
-		//"Bookman Old Style Fett Kursiv", "Candara", "DejaVu Sans Mono"
-
-		/*PFont font = new PFont(PFont.findFont(PFont.list()[io.github.kurrycat.arrows.Sketch.font % PFont.list().length]), true);
-		p.textFont(font, 20);*/
 
 		Sketch.p.textFont(font);
 		Sketch.p.textSize(height / 2f);
@@ -73,7 +111,13 @@ public class Button {
 
 		if (textColor == null) Sketch.p.noFill();
 		else Sketch.p.fill(textColor);
-		Sketch.p.text(text, x + (int) (width / 2D), y + (int) (height / 2D));
+
+		if (text != null)
+			Sketch.p.text(text, x + (int) (width / 2D), y + (int) (height / 2D));
+
+		if (shape != null) {
+			Sketch.p.shape(shape, x + (int) (width / 2D), y + (int) (height / 2D));
+		}
 	}
 
 	public void update() {
@@ -123,6 +167,12 @@ public class Button {
 	}
 
 	public Button setHeight(int height) {
+		this.height = height;
+		return this;
+	}
+
+	public Button setSize(int width, int height) {
+		this.width = width;
 		this.height = height;
 		return this;
 	}
@@ -182,5 +232,41 @@ public class Button {
 		strokeWeight = button.strokeWeight;
 		hoverStrokeWeight = button.hoverStrokeWeight;
 		return this;
+	}
+
+	public Integer getBgColor() {
+		return bgColor;
+	}
+
+	public Integer getStrokeColor() {
+		return strokeColor;
+	}
+
+	public Integer getTextColor() {
+		return textColor;
+	}
+
+	public Float getStrokeWeight() {
+		return strokeWeight;
+	}
+
+	public Integer getHoverBgColor() {
+		return hoverBgColor;
+	}
+
+	public Integer getHoverStrokeColor() {
+		return hoverStrokeColor;
+	}
+
+	public Integer getHoverTextColor() {
+		return hoverTextColor;
+	}
+
+	public Float getHoverStrokeWeight() {
+		return hoverStrokeWeight;
+	}
+
+	public PVector getPos() {
+		return new PVector(x, y);
 	}
 }

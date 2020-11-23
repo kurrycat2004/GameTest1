@@ -19,7 +19,6 @@ public enum KEYS {
 	public static final ArrayList<KEYS> keysPressed = new ArrayList<>();
 	public static final ArrayList<KEYS> nextMoveKeys = new ArrayList<>();
 
-
 	public final int[] keyCode;
 	public final PVector dir;
 	public PShape shape;
@@ -77,13 +76,6 @@ public enum KEYS {
 		s.addChild(arrow);
 		s.addChild(body);
 
-		/*
-		 * 1 -1 -> 1
-		 * 1 1 -> 3
-		 * -1 1 -> -3
-		 * -1 -1 -> -1
-		 * */
-
 		if (Math.abs(dir.x) == 1 && Math.abs(dir.y) == 1) {
 			s.rotate(dir.x * (dir.y + 2) * PConstants.QUARTER_PI);
 		} else {
@@ -128,5 +120,23 @@ public enum KEYS {
 			if (k.dir.equals(dir)) return k;
 		}
 		return null;
+	}
+
+	public static KEYS random() {
+		KEYS[] keys = values();
+		int index = (int) (Math.random() * keys.length);
+		return keys[index];
+	}
+
+	public static KEYS randomStraight() {
+		KEYS[] keys = new KEYS[]{ARROW_UP, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT};
+		int index = (int) (Math.random() * keys.length);
+		return keys[index];
+	}
+
+	public static KEYS randomDiagonal() {
+		KEYS[] keys = new KEYS[]{ARROW_UP_LEFT, ARROW_UP_RIGHT, ARROW_DOWN_LEFT, ARROW_DOWN_RIGHT};
+		int index = (int) (Math.random() * keys.length);
+		return keys[index];
 	}
 }

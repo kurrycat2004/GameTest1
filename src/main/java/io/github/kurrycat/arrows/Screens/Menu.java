@@ -3,9 +3,10 @@ package io.github.kurrycat.arrows.Screens;
 import io.github.kurrycat.arrows.*;
 import processing.core.PFont;
 
-import java.util.ArrayList;
-
 public class Menu extends Screen {
+	/**
+	 * static main Button design
+	 */
 	public static final Button mainDesign = new Button("", 0, 0, 0, 0)
 			.setBgColor(255)
 			.setHoverBgColor(null)
@@ -13,14 +14,11 @@ public class Menu extends Screen {
 			.setHoverTextColor(255);
 
 	public static final Menu instance = new Menu();
-	public final PFont titleFont = new PFont(PFont.findFont("Bookman Old Style Fett Kursiv"), true);
-
+	public static final PFont titleFont = new PFont(PFont.findFont("Bookman Old Style Fett Kursiv"), true);
 
 	static {
 		screens.add(instance);
 	}
-
-	public ArrayList<Star> stars = new ArrayList<>();
 
 	private final Button startGame = new Button("Start Game", Sketch.p.width / 2 - 50, Sketch.p.height / 2 - 20, 200, 60).copyDesign(mainDesign);
 	private final Button settings = new Button("Settings", Sketch.p.width / 2 - 50, Sketch.p.height / 2 + 30, 200, 60).copyDesign(mainDesign);
@@ -42,16 +40,6 @@ public class Menu extends Screen {
 		help.setClickedCallback(() -> {
 			ScreenHandler.pushScreen(Help.instance);
 		});
-/*
-		startGame.setBgColor(255)
-				.setTextColor(0)
-				.setHoverTextColor(255);
-		settings.setBgColor(255)
-				.setTextColor(0)
-				.setHoverTextColor(255);
-		help.setBgColor(255)
-				.setTextColor(0)
-				.setHoverTextColor(255);*/
 	}
 
 	public void windowResized() {
@@ -77,9 +65,7 @@ public class Menu extends Screen {
 	public void draw() {
 		ScreenHandler.drawBackground(0);
 
-		for (int i = 0; i < stars.size(); i++) {
-			stars.get(i).draw();
-		}
+		ScreenHandler.drawArrows();
 
 		Sketch.p.noStroke();
 		//"Forte", "Monospaced.bolditalic", "OCR A Extended"
@@ -100,14 +86,6 @@ public class Menu extends Screen {
 
 	public void update() {
 		updateButtons();
-		for (Star s : stars) s.update();
-		if (Math.random() < 0.2) {
-			stars.add(new Star(Sketch.p.width + 100, Math.random() * Sketch.p.height, -Math.random() - 2, (Math.random() - 0.5), Math.random() * 20 + 20));
-		}
-		for (int i = stars.size() - 1; i >= 0; i--) {
-			Star s = stars.get(i);
-			if (s.x < 0 || s.x > Sketch.p.width + 100 || s.y < 0 || s.y > Sketch.p.height)
-				stars.remove(i);
-		}
+		ScreenHandler.updateArrows();
 	}
 }
