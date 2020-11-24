@@ -4,6 +4,9 @@ import io.github.kurrycat.arrows.Screens.*;
 
 import java.util.ArrayList;
 
+/**
+ * ScreenHandler class that handles the different {@link Screen} subclasses.
+ */
 public class ScreenHandler {
 	private static Screen beforeScreen;
 	private static Screen currentScreen;
@@ -12,6 +15,9 @@ public class ScreenHandler {
 
 	public static ArrayList<BackgroundArrow> backgroundArrows = new ArrayList<>();
 
+	/**
+	 * Method that makes sure that all static codeblocks in the Screens get executed.
+	 */
 	public static void loadAllScreens() {
 		Screen s = Menu.instance;
 		s = Game.instance;
@@ -20,10 +26,23 @@ public class ScreenHandler {
 		s = Help.instance;
 	}
 
+	/**
+	 * Method to push a Screen subclass instance.<br>
+	 * Calls {@link #pushScreen(Screen screen, boolean alpha)} with {@code alpha = true}.<br>
+	 *
+	 * @param screen The screen to be pushed.
+	 */
 	public static void pushScreen(Screen screen) {
 		pushScreen(screen, true);
 	}
 
+	/**
+	 * Method to push a Screen subclass instance.<br>
+	 * Pushes the new screen with a smooth transition if {@code alpha} is {@code true} and adds it to {@link #history}
+	 *
+	 * @param screen The screen to be pushed.
+	 * @param alpha  boolean that decides if the screen should be pushed with a transition.
+	 */
 	public static void pushScreen(Screen screen, boolean alpha) {
 		if (alpha) ScreenHandler.alpha = 0;
 		if (screen == Game.instance)
@@ -33,31 +52,64 @@ public class ScreenHandler {
 		}
 		if (currentScreen != null) {
 			history.add(currentScreen);
-			beforeScreen = currentScreen;
 		}
 		if (screen == Game.instance || screen == Menu.instance)
 			history.clear();
+
+		pushScreenNoHistory(screen, alpha);
+	}
+
+	/**
+	 * Method to push a Screen subclass instance.<br>
+	 * Pushes the new screen with a smooth transition if {@code alpha} is {@code true}
+	 *
+	 * @param screen The screen to be pushed.
+	 * @param alpha  boolean that decides if the screen should be pushed with a transition.
+	 */
+	private static void pushScreenNoHistory(Screen screen, boolean alpha) {
+		if (alpha) ScreenHandler.alpha = 0;
+		if (currentScreen != null) {
+			beforeScreen = currentScreen;
+		}
 		currentScreen = screen;
 		currentScreen.init();
 	}
 
+	/**
+	 * Draws {@link #currentScreen} and {@link #beforeScreen} if in transition.
+	 */
 	public static void drawCurrentScreen() {
 		if (alpha < 255 && beforeScreen != null) beforeScreen.draw();
 		currentScreen.draw();
 	}
 
+	/**
+	 * {@link #currentScreen} getter
+	 *
+	 * @return {@link #currentScreen}
+	 */
 	public static Screen getCurrentScreen() {
 		return currentScreen;
 	}
 
+	/**
+	 *
+	 */
 	public static void back() {
 		if (history.size() > 0) {
+			Screen screenToPush = history.get(history.size() - 1);
 			Sketch.p.getSurface().showCursor();
-			currentScreen = history.get(history.size() - 1);
+			pushScreenNoHistory(screenToPush, true);
 			history.remove(history.size() - 1);
 		}
 	}
 
+
+	/**
+	 * Draws the background with alpha for transitions
+	 *
+	 * @param color The color of the background
+	 */
 	public static void drawBackground(int color) {
 		int alpha = ScreenHandler.alpha;
 		Class<?> caller = null;
@@ -73,18 +125,27 @@ public class ScreenHandler {
 		Sketch.p.rect(0, 0, Sketch.p.width, Sketch.p.height);
 	}
 
+	/**
+	 * Updates the alpha
+	 */
 	public static void update() {
 		if (alpha < 255) {
 			alpha += 10;
 		} else if (alpha != 255) alpha = 255;
 	}
 
+	/**
+	 * Draws the background arrows
+	 */
 	public static void drawArrows() {
 		for (int i = 0; i < ScreenHandler.backgroundArrows.size(); i++) {
 			ScreenHandler.backgroundArrows.get(i).draw();
 		}
 	}
 
+	/**
+	 * Moves the background arrows
+	 */
 	public static void updateArrows() {
 		for (BackgroundArrow s : backgroundArrows) s.update();
 		if (Math.random() < 0.3) {

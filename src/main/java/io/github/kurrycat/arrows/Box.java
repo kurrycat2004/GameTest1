@@ -70,7 +70,7 @@ public class Box {
 
 	public boolean in(PVector pos, PVector size) {
 		return this.pos.x >= pos.x && this.pos.x <= pos.x + size.x && this.pos.y >= pos.y
-				&& this.pos.y <= pos.y + size.y;
+				       && this.pos.y <= pos.y + size.y;
 	}
 
 	public boolean in(int posX, int posY, int sizeX, int sizeY) {
@@ -103,5 +103,15 @@ public class Box {
 
 	public static void spawn() {
 		boxes.add(new Box());
+	}
+
+	public Box setPos(PVector pos) {
+		this.pos.set(pos.copy());
+		return this;
+	}
+
+	public Box setPos(float x, float y) {
+		this.setPos(new PVector(x, y));
+		return this;
 	}
 }

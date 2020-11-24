@@ -1,13 +1,30 @@
 package io.github.kurrycat.arrows;
 
+/**
+ * RoundButton class that extends {@link Button}
+ */
 public class RoundButton extends Button {
+	/**
+	 * Radius of the round button
+	 */
 	protected int radius;
 
+	/**
+	 * RoundButton constructor
+	 *
+	 * @param text   text that gets displayed on the button
+	 * @param x      x position of the button
+	 * @param y      y position of the button
+	 * @param radius radius of the button
+	 */
 	public RoundButton(String text, int x, int y, int radius) {
 		super(text, x, y, radius, radius);
 		this.radius = radius;
 	}
 
+	/**
+	 * Draw method that overrides {@link Button#draw()} to draw a round button
+	 */
 	@Override
 	public void draw() {
 		boolean hover = contains(Sketch.p.mouseX, Sketch.p.mouseY);
@@ -36,6 +53,13 @@ public class RoundButton extends Button {
 		Sketch.p.text(text, x, y);
 	}
 
+	/**
+	 * Contains method that overrides {@link Button#contains(int x, int y)} to check if the point is inside the round button
+	 *
+	 * @param x x position of the point that gets checked
+	 * @param y y position of the point that gets checked
+	 * @return if x and y are inside the button
+	 */
 	@Override
 	public boolean contains(int x, int y) {
 		return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2)) < radius;

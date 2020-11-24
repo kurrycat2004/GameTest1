@@ -6,31 +6,99 @@ import processing.core.PVector;
 
 import java.util.function.Supplier;
 
+/**
+ * Button class
+ */
 public class Button {
+	/**
+	 * Default font
+	 */
 	public static final PFont defaultFont = new PFont(PFont.findFont("Candara"), true);
+	/**
+	 * Button font being {@link #defaultFont} by default
+	 */
 	protected PFont font = defaultFont;
 
+	/**
+	 * Text to be displayed on the button
+	 */
 	protected String text;
+	/**
+	 * PShape to be displayed on the button
+	 */
 	protected PShape shape;
+	/**
+	 * x and y position of the button
+	 */
 	protected int x, y;
+	/**
+	 * width and height of the button
+	 */
 	protected int width, height;
 
+	/**
+	 * Background color of the button with {@code null} meaning no background with a default value of {@code null}
+	 */
 	protected Integer bgColor = null;
+	/**
+	 * Stroke color of the button with {@code null} meaning no stroke with a default value of {@code null}
+	 */
 	protected Integer strokeColor = null;
+	/**
+	 * Text color which defaults to black
+	 */
 	protected Integer textColor = Sketch.p.color(0);
+	/**
+	 * Stroke weight with {@code 1f} as default value
+	 */
 	protected Float strokeWeight = 1f;
 
+	/**
+	 * Background color of the button when {@link #contains(int x, int y)} returns {@code true} with {@code null} meaning no background with a default value of {@code null}
+	 */
 	protected Integer hoverBgColor = null;
+	/**
+	 * Stroke color of the button when {@link #contains(int x, int y)} returns {@code true} with {@code null} meaning no stroke with a default value of gray
+	 */
 	protected Integer hoverStrokeColor = Sketch.p.color(200);
+	/**
+	 * Stroke color of the button when {@link #contains(int x, int y)} returns {@code true} with a default value of black
+	 */
 	protected Integer hoverTextColor = Sketch.p.color(0);
+	/**
+	 * Stroke weight when {@link #contains(int x, int y)} returns {@code true} with {@code 4f} as default value
+	 */
 	protected Float hoverStrokeWeight = 4f;
 
+	/**
+	 * The clicked callback.
+	 * {@code null} by default
+	 */
 	protected Runnable clicked;
+	/**
+	 * The draw method to override the old one
+	 * {@code null} by default
+	 */
 	protected Runnable drawMethod;
+	/**
+	 * The hover method that gets executed instead of {@link #contains(int x, int y)}.
+	 * {@code null} by default
+	 */
 	protected Supplier<Boolean> hoverMethod;
 
+	/**
+	 * Indicates whether the user presses a mouse button while {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 */
 	protected boolean pressing = false;
 
+	/**
+	 * Button constructor
+	 *
+	 * @param x      x position of the button
+	 * @param y      y position of the button
+	 * @param width  width of the button
+	 * @param height height of the button
+	 */
 	public Button(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
@@ -38,6 +106,15 @@ public class Button {
 		this.height = height;
 	}
 
+	/**
+	 * Button constructor
+	 *
+	 * @param text   text to be displayed on the button
+	 * @param x      x position of the button
+	 * @param y      y position of the button
+	 * @param width  width of the button
+	 * @param height height of the button
+	 */
 	public Button(String text, int x, int y, int width, int height) {
 		this.text = text;
 		this.x = x;
@@ -46,34 +123,79 @@ public class Button {
 		this.height = height;
 	}
 
+	/**
+	 * Creates a new button with a position relative to the middle of the screen
+	 *
+	 * @param text   text to be displayed on the button
+	 * @param xOff   x position of the button relative to the center of the screen
+	 * @param yOff   y position of the button relative to the center of the screen
+	 * @param width  width of the button
+	 * @param height height of the button
+	 * @return button instance
+	 */
 	public static Button middleOffset(String text, int xOff, int yOff, int width, int height) {
 		return new Button(text, Sketch.p.width / 2 - width / 2 + xOff, Sketch.p.height / 2 - height / 2 + yOff, width, height);
 	}
 
+
+	/**
+	 * Builder setter for {@link #clicked}
+	 *
+	 * @param r {@link Runnable} that should be executed if the player clicks and {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 * @return this
+	 */
 	public Button setClickedCallback(Runnable r) {
 		clicked = r;
 		return this;
 	}
 
+	/**
+	 * Builder setter for {@link #drawMethod}
+	 *
+	 * @param r {@link Runnable} that should be executed instead of {@link #draw()}
+	 * @return this
+	 */
 	public Button setDrawMethod(Runnable r) {
 		drawMethod = r;
 		return this;
 	}
 
+	/**
+	 * Builder setter for {@link #hoverMethod}
+	 *
+	 * @param r {@link Runnable} that should be used instead of {@link #contains(int x, int y)}
+	 * @return this
+	 */
 	public Button setHoverMethod(Supplier<Boolean> r) {
 		hoverMethod = r;
 		return this;
 	}
 
+	/**
+	 * Builder setter for {@link #shape}
+	 *
+	 * @param shape PShape to be displayed on the button
+	 * @return this
+	 */
 	public Button setShape(PShape shape) {
 		this.shape = shape;
 		return this;
 	}
 
+	/**
+	 * Method that returns a boolean indicating if the point {@code x, y} is inside the button
+	 *
+	 * @param x x coordinate of the point
+	 * @param y y coordinate of the point
+	 * @return if the point is inside the button
+	 */
 	public boolean contains(int x, int y) {
 		return x > this.x && x < this.x + width && y > this.y && y < this.y + height;
 	}
 
+	/**
+	 * Draws the button if {@link #drawMethod} {@code == null}, else executes {@link #drawMethod}
+	 */
 	public void draw() {
 		//Fonts: "Book Antiqua Fett", "Bookman Old Style", Bookman Old Style Fett", "Bookman Old Style Fett"
 		//"Bookman Old Style Fett Kursiv", "Candara", "DejaVu Sans Mono"

@@ -7,6 +7,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Help extends Screen {
@@ -16,22 +17,22 @@ public class Help extends Screen {
 	private final Button startGame = new Button("Start Game", 0, 0, 160, 50).copyDesign(Menu.mainDesign);
 
 	private final Button arrowUp = new Button(0, 0, 0, 0)
-			.setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_UP))
-			.copyDesign(Menu.mainDesign);
+			                               .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_UP))
+			                               .copyDesign(Menu.mainDesign);
 	private final Button arrowDown = new Button(0, 0, 0, 0)
-			.setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_DOWN))
-			.copyDesign(Menu.mainDesign);
+			                                 .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_DOWN))
+			                                 .copyDesign(Menu.mainDesign);
 	private final Button arrowLeft = new Button(0, 0, 0, 0)
-			.setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_LEFT))
-			.copyDesign(Menu.mainDesign);
+			                                 .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_LEFT))
+			                                 .copyDesign(Menu.mainDesign);
 	private final Button arrowRight = new Button(0, 0, 0, 0)
-			.setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_RIGHT))
-			.copyDesign(Menu.mainDesign);
+			                                  .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_RIGHT))
+			                                  .copyDesign(Menu.mainDesign);
 
 	private final Button currentArrowButton = new Button(0, 0, 0, 0)
-			.setHoverMethod(() -> false)
-			.copyDesign(Menu.mainDesign)
-			.setBgColor(Sketch.p.color(50, 200, 50));
+			                                          .setHoverMethod(() -> false)
+			                                          .copyDesign(Menu.mainDesign)
+			                                          .setBgColor(Sketch.p.color(50, 200, 50));
 
 	private final ArrayList<Box> arrows = new ArrayList<>();
 	private final ArrayList<OffsetDateTime> times = new ArrayList<>();
@@ -77,6 +78,10 @@ public class Help extends Screen {
 		currentArrowButton
 				.setSize(Box.BOX_SIZE, Box.BOX_SIZE)
 				.setMiddleOffsetPos(0, topYOffset - Box.BOX_SIZE * 2);
+		if (arrows.size() > 0) {
+			currentArrowButton.setShape(arrows.get(arrows.size() - 1).getArr().shape);
+			arrows.get(arrows.size() - 1).setPos(currentArrowButton.getPos());
+		}
 	}
 
 	public void init() {
@@ -128,17 +133,18 @@ public class Help extends Screen {
 			float y = yOff + (i % 5) * lineHeight;
 			Sketch.p.text(i + 1 + "." + timeDiffs.get(i).toString() + "ms", x, y);
 		}
+
 		average /= timeDiffs.size();
 		if (timeDiffs.size() == 10)
 			Settings.average = Math.min(Settings.average, average);
 
-		String avg = timeDiffs.size() != 10 ? "Not enough times" : String.format("%.1f", average) + "ms";
+		String avg = timeDiffs.size() != 10 ? "Not enough times" : String.format(Locale.US, "%.1f", average) + "ms";
 
 		Sketch.p.textSize(Box.BOX_SIZE / 3.5f);
 		Sketch.p.text("Average of 10: " + avg, xOff, yOff + Box.BOX_SIZE * 3f);
 
 		Sketch.p.textSize(Box.BOX_SIZE / 3.5f);
-		Sketch.p.text("PB: " + String.format("%.1f", Settings.average), xOff, yOff + Box.BOX_SIZE * 3.5f);
+		Sketch.p.text("PB: " + String.format(Locale.US, "%.1f", Settings.average), xOff, yOff + Box.BOX_SIZE * 3.5f);
 
 
 		KEYS currKey = arrows.get(arrows.size() - 1).getArr();
@@ -182,7 +188,7 @@ public class Help extends Screen {
 
 		for (int i = arrows.size() - 1; i >= 0; i--) {
 			arrows.get(i).update();
-			if (!arrows.get(i).onScreen())
+			if (!arrows.get(i).onScreen() && arrows.get(i).isDisabled())
 				arrows.remove(i);
 		}
 

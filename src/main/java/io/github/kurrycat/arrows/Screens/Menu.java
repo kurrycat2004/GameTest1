@@ -3,6 +3,9 @@ package io.github.kurrycat.arrows.Screens;
 import io.github.kurrycat.arrows.*;
 import processing.core.PFont;
 
+/**
+ * Menu class extends {@link Screen}
+ */
 public class Menu extends Screen {
 	/**
 	 * static main Button design

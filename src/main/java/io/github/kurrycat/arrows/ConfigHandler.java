@@ -6,21 +6,39 @@ import processing.data.JSONObject;
 import java.io.*;
 import java.lang.reflect.Field;
 
+/**
+ * Handler class for the config file
+ */
 public class ConfigHandler {
+	/**
+	 * The config File object
+	 */
 	public static File configFile;
+	/**
+	 * The config filename
+	 */
 	public static final String configFileName = "config.json";
+	/**
+	 * The config JSONObject
+	 */
 	public static JSONObject config;
 
+	/**
+	 * Writes {@link #config} to {@link #configFile}
+	 */
 	public static void write() {
 		try {
 			PrintWriter writer = new PrintWriter(configFile);
 			writer.write(config.toString());
 			writer.flush();
 			writer.close();
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException ignored) {
 		}
 	}
 
+	/**
+	 * Initializes {@link #config} and {@link #configFile} and creates {@link #configFile} if it doesn't exist.
+	 */
 	public static void init() {
 		try {
 			configFile = new File(ConfigHandler.class.getProtectionDomain().getCodeSource().getLocation().getFile());
@@ -50,6 +68,9 @@ public class ConfigHandler {
 		}
 	}
 
+	/**
+	 * Loads all fields from {@link #config} and sets them in {@link Settings}
+	 */
 	public static void loadConfig() {
 		if (config == null) return;
 		Game.instance.highscore = config.getInt("highscore", 0);
@@ -64,6 +85,9 @@ public class ConfigHandler {
 		}
 	}
 
+	/**
+	 * Sets all fields from {@link Settings} into {@link #config} and executes {@link #write()}
+	 */
 	public static void saveConfig() {
 		if (config == null) return;
 		config.setInt("highscore", Game.instance.highscore);

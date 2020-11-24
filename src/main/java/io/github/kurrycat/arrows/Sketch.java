@@ -11,6 +11,9 @@ import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Sketch class that extends {@link PApplet} so that it can be executed as a processing sketch.
+ */
 public class Sketch extends PApplet {
 	public static Sketch p = new Sketch();
 	public static int windowWidth;
@@ -18,6 +21,9 @@ public class Sketch extends PApplet {
 
 	public static JFrame jframe;
 
+	/**
+	 * Gets executed once for window creation.
+	 */
 	public void settings() {
 		ConfigHandler.init();
 		ConfigHandler.loadConfig();
@@ -32,6 +38,10 @@ public class Sketch extends PApplet {
 		registerMethod("pre", this);
 	}
 
+	/**
+	 * Gets executed once.<br>
+	 * Initialization of jframe var and update threads.
+	 */
 	public void setup() {
 		jframe = (javax.swing.JFrame) ((processing.awt.PSurfaceAWT.SmoothCanvas) surface.getNative()).getFrame();
 
@@ -70,6 +80,11 @@ public class Sketch extends PApplet {
 		}, 0, 120_000 /* 2min */);
 	}
 
+	/**
+	 * Utility function to open message popup window with the specified {@code message}
+	 *
+	 * @param message The message to be displayed.
+	 */
 	public static void message(String message) {
 		JOptionPane.showMessageDialog(Sketch.jframe, message);
 	}
@@ -82,7 +97,10 @@ public class Sketch extends PApplet {
 		super.handleKeyEvent(event);
 	}
 
-	// window resize handling
+	/**
+	 * Window resize handling
+	 * Gets called before draw and calls {@link #onResize()} if window size changed.
+	 */
 	@SuppressWarnings("unused")
 	public void pre() {
 		if (windowWidth == width && windowHeight == height) return;
@@ -92,6 +110,10 @@ public class Sketch extends PApplet {
 		onResize();
 	}
 
+	/**
+	 * Resize event getting called in {@link #pre()} when window size changes.<br>
+	 * Updates {@link Box#BOX_SIZE} and arrow shapes and calls {@link Screen#windowResized()} on every screen.
+	 */
 	public void onResize() {
 		Box.BOX_SIZE = (short) (windowWidth / 25);
 		KEYS.init();
@@ -101,10 +123,17 @@ public class Sketch extends PApplet {
 		}
 	}
 
+	/**
+	 * Game loop that gets executed every frame.<br>
+	 * Just executes {@link ScreenHandler#drawCurrentScreen()}.
+	 */
 	public void draw() {
 		ScreenHandler.drawCurrentScreen();
 	}
 
+	/**
+	 * Draws the current FPS on screen.
+	 */
 	public void showFPS() {
 		Sketch.p.fill(255);
 		Sketch.p.textFont(Game.scoreFont);
@@ -112,10 +141,16 @@ public class Sketch extends PApplet {
 		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
 	}
 
+	/**
+	 * Mouse pressed event.
+	 */
 	public void mousePressed() {
 
 	}
 
+	/**
+	 * Key pressed event that updates the {@link KEYS#keysPressed} arraylist and the {@link KEYS#nextMoveKeys} arraylist.
+	 */
 	public void keyPressed() {
 		KEYS k = KEYS.fromKeyCode(keyCode);
 		if (k != null) {
@@ -126,12 +161,20 @@ public class Sketch extends PApplet {
 		}
 	}
 
+	/**
+	 * Key released event that updates the {@link KEYS#keysPressed} arraylist and the {@link KEYS#nextMoveKeys} arraylist.
+	 */
 	public void keyReleased() {
 		KEYS k = KEYS.fromKeyCode(keyCode);
 		if (k != null)
 			KEYS.keysPressed.remove(k);
 	}
 
+	/**
+	 * Main method just executes the Sketch.
+	 *
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String[] processingArgs = {"io.github.kurrycat.arrows.Sketch"};
 		PApplet.runSketch(processingArgs, p);

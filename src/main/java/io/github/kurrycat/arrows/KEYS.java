@@ -6,6 +6,9 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+/**
+ * KEYS enum with all 8 arrow directions
+ */
 public enum KEYS {
 	ARROW_UP(new int[]{38}, new PVector(0f, -1f)),
 	ARROW_DOWN(new int[]{40}, new PVector(0f, 1f)),
@@ -16,11 +19,26 @@ public enum KEYS {
 	ARROW_DOWN_RIGHT(new int[]{40, 39}, new PVector(1f, 1f)),
 	ARROW_DOWN_LEFT(new int[]{40, 37}, new PVector(-1f, 1f));
 
+	/**
+	 * ArrayList of all arrow keys currently held down
+	 */
 	public static final ArrayList<KEYS> keysPressed = new ArrayList<>();
+	/**
+	 * ArrayList of all arrow keys pressed since the last time no key was pressed
+	 */
 	public static final ArrayList<KEYS> nextMoveKeys = new ArrayList<>();
 
+	/**
+	 * int array containing all keyCodes needed to be pressed for the arrow direction
+	 */
 	public final int[] keyCode;
+	/**
+	 * Direction the arrow is pointing as PVector
+	 */
 	public final PVector dir;
+	/**
+	 * The PShape of the arrow
+	 */
 	public PShape shape;
 
 	KEYS(int[] keyCode, PVector dir) {
@@ -28,12 +46,20 @@ public enum KEYS {
 		this.dir = dir;
 	}
 
+	/**
+	 * init method that creates the shapes for all 8 directions
+	 */
 	public static void init() {
 		for (KEYS k : KEYS.values()) {
 			k.shape = k.getShape();
 		}
 	}
 
+	/**
+	 * Creates the PShape for the arrow
+	 *
+	 * @return The created PShape
+	 */
 	private PShape getShape() {
 		float ARROW_SIZE = Box.BOX_SIZE / 100f;
 
@@ -86,10 +112,22 @@ public enum KEYS {
 		return s;
 	}
 
+	/**
+	 * Gets the KEYS instance from a single keyCode
+	 *
+	 * @param keyCode keyCode to search for
+	 * @return KEYS instance
+	 */
 	public static KEYS fromKeyCode(int keyCode) {
 		return fromKeyCode(new int[]{keyCode});
 	}
 
+	/**
+	 * Gets the KEYS instance from a keyCode int array
+	 *
+	 * @param keyCode keyCode array to search for
+	 * @return KEYS instance
+	 */
 	public static KEYS fromKeyCode(int[] keyCode) {
 		out:
 		for (KEYS k : values()) {
@@ -102,6 +140,11 @@ public enum KEYS {
 		return null;
 	}
 
+	/**
+	 * Gets the KEYS instance that matches the keys pressed in {@link #nextMoveKeys}
+	 *
+	 * @return KEYS instance
+	 */
 	public static KEYS getKeyPressed() {
 		ArrayList<KEYS> nextKeys = new ArrayList<>(nextMoveKeys);
 		if (nextKeys.isEmpty()) return null;
@@ -122,18 +165,33 @@ public enum KEYS {
 		return null;
 	}
 
+	/**
+	 * Gets a random KEYS instance
+	 *
+	 * @return random KEYS instance
+	 */
 	public static KEYS random() {
 		KEYS[] keys = values();
 		int index = (int) (Math.random() * keys.length);
 		return keys[index];
 	}
 
+	/**
+	 * Gets a random straight KEYS instance
+	 *
+	 * @return random straight KEYS instance
+	 */
 	public static KEYS randomStraight() {
 		KEYS[] keys = new KEYS[]{ARROW_UP, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT};
 		int index = (int) (Math.random() * keys.length);
 		return keys[index];
 	}
 
+	/**
+	 * Gets a random diagonal KEYS instance
+	 *
+	 * @return random diagonal KEYS instance
+	 */
 	public static KEYS randomDiagonal() {
 		KEYS[] keys = new KEYS[]{ARROW_UP_LEFT, ARROW_UP_RIGHT, ARROW_DOWN_LEFT, ARROW_DOWN_RIGHT};
 		int index = (int) (Math.random() * keys.length);
