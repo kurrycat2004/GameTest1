@@ -242,6 +242,9 @@ public class Button {
 		}
 	}
 
+	/**
+	 * Updates {@link #pressing}
+	 */
 	public void update() {
 		if (contains(Sketch.p.mouseX, Sketch.p.mouseY)) {
 			if (Sketch.p.mousePressed)
@@ -256,94 +259,205 @@ public class Button {
 		}
 	}
 
+	/**
+	 * {@link #text} builder setter
+	 *
+	 * @param text the text that gets displayed
+	 * @return this
+	 */
 	public Button setText(String text) {
 		this.text = text;
 		return this;
 	}
 
+	/**
+	 * {@link #x} builder setter
+	 *
+	 * @param x the x position of the button
+	 * @return this
+	 */
 	public Button setX(int x) {
 		this.x = x;
 		return this;
 	}
 
+	/**
+	 * {@link #y} builder setter
+	 *
+	 * @param y the y position of the button
+	 * @return this
+	 */
 	public Button setY(int y) {
 		this.y = y;
 		return this;
 	}
 
+	/**
+	 * {@link #x} and {@link #y} builder setter
+	 *
+	 * @param x the x position of the button
+	 * @param y the y position of the button
+	 * @return this
+	 */
 	public Button setPos(int x, int y) {
 		setX(x);
 		setY(y);
 		return this;
 	}
 
+	/**
+	 * {@link #x} and {@link #y} builder setter
+	 *
+	 * @param xOff the x position of the button relative to the middle of the screen
+	 * @param yOff the y position of the button relative to the middle of the screen
+	 * @return this
+	 */
 	public Button setMiddleOffsetPos(int xOff, int yOff) {
 		setX(Sketch.p.width / 2 - width / 2 + xOff);
 		setY(Sketch.p.height / 2 - height / 2 + yOff);
 		return this;
 	}
 
+	/**
+	 * {@link #width} builder setter
+	 *
+	 * @param width the new width of the button
+	 * @return this
+	 */
 	public Button setWidth(int width) {
 		this.width = width;
 		return this;
 	}
 
+	/**
+	 * {@link #height} builder setter
+	 *
+	 * @param height the new height of the button
+	 * @return this
+	 */
 	public Button setHeight(int height) {
 		this.height = height;
 		return this;
 	}
 
+	/**
+	 * {@link #width} and {@link #height} builder setter
+	 *
+	 * @param width  the new width of the button
+	 * @param height the new height of the button
+	 * @return this
+	 */
 	public Button setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
 		return this;
 	}
 
+	/**
+	 * {@link #bgColor} builder setter
+	 *
+	 * @param bgColor the new background color
+	 * @return this
+	 */
 	public Button setBgColor(Integer bgColor) {
 		this.bgColor = bgColor;
 		return this;
 	}
 
+	/**
+	 * {@link #strokeColor} builder setter
+	 *
+	 * @param strokeColor the new stroke color
+	 * @return this
+	 */
 	public Button setStrokeColor(Integer strokeColor) {
 		this.strokeColor = strokeColor;
 		return this;
 	}
 
+	/**
+	 * {@link #textColor} builder setter
+	 *
+	 * @param textColor the new text color
+	 * @return this
+	 */
 	public Button setTextColor(Integer textColor) {
 		this.textColor = textColor;
 		return this;
 	}
 
+	/**
+	 * {@link #strokeWeight} builder setter
+	 *
+	 * @param strokeWeight the new stroke weight
+	 * @return this
+	 */
 	public Button setStrokeWeight(Float strokeWeight) {
 		this.strokeWeight = strokeWeight;
 		return this;
 	}
 
+	/**
+	 * {@link #hoverBgColor} builder setter
+	 *
+	 * @param hoverBgColor the new background color when {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 * @return this
+	 */
 	public Button setHoverBgColor(Integer hoverBgColor) {
 		this.hoverBgColor = hoverBgColor;
 		return this;
 	}
 
+	/**
+	 * {@link #hoverStrokeColor} builder setter
+	 *
+	 * @param hoverStrokeColor the new stroke color when {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 * @return this
+	 */
 	public Button setHoverStrokeColor(Integer hoverStrokeColor) {
 		this.hoverStrokeColor = hoverStrokeColor;
 		return this;
 	}
 
+	/**
+	 * {@link #hoverTextColor} builder setter
+	 *
+	 * @param hoverTextColor the new text color when {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 * @return this
+	 */
 	public Button setHoverTextColor(Integer hoverTextColor) {
 		this.hoverTextColor = hoverTextColor;
 		return this;
 	}
 
+	/**
+	 * {@link #hoverStrokeWeight} builder setter
+	 *
+	 * @param hoverStrokeWeight the new stroke weight when {@link #contains(int x, int y)} or {@link #hoverMethod} returns {@code true}
+	 * @return this
+	 */
 	public Button setHoverStrokeWeight(Float hoverStrokeWeight) {
 		this.hoverStrokeWeight = hoverStrokeWeight;
 		return this;
 	}
 
+	/**
+	 * {@link #font} builder setter
+	 *
+	 * @param font the new font
+	 * @return this
+	 */
 	public Button setFont(PFont font) {
 		this.font = font;
 		return this;
 	}
 
+	/**
+	 * Copies all design variables from the button
+	 *
+	 * @param button the button to copy the design from
+	 * @return this
+	 */
 	public Button copyDesign(Button button) {
 		bgColor = button.bgColor;
 		hoverBgColor = button.hoverBgColor;
@@ -356,38 +470,83 @@ public class Button {
 		return this;
 	}
 
+	/**
+	 * {@link #bgColor} getter
+	 *
+	 * @return {@link #bgColor}
+	 */
 	public Integer getBgColor() {
 		return bgColor;
 	}
 
+	/**
+	 * {@link #strokeColor} getter
+	 *
+	 * @return {@link #strokeColor}
+	 */
 	public Integer getStrokeColor() {
 		return strokeColor;
 	}
 
+	/**
+	 * {@link #textColor} getter
+	 *
+	 * @return {@link #textColor}
+	 */
 	public Integer getTextColor() {
 		return textColor;
 	}
 
+	/**
+	 * {@link #strokeWeight} getter
+	 *
+	 * @return {@link #strokeWeight}
+	 */
 	public Float getStrokeWeight() {
 		return strokeWeight;
 	}
 
+	/**
+	 * {@link #hoverBgColor} getter
+	 *
+	 * @return {@link #hoverBgColor}
+	 */
 	public Integer getHoverBgColor() {
 		return hoverBgColor;
 	}
 
+	/**
+	 * {@link #hoverStrokeColor} getter
+	 *
+	 * @return {@link #hoverStrokeColor}
+	 */
 	public Integer getHoverStrokeColor() {
 		return hoverStrokeColor;
 	}
 
+	/**
+	 * {@link #hoverTextColor} getter
+	 *
+	 * @return {@link #hoverTextColor}
+	 */
 	public Integer getHoverTextColor() {
 		return hoverTextColor;
 	}
 
+	/**
+	 * {@link #hoverStrokeWeight} getter
+	 *
+	 * @return {@link #hoverStrokeWeight}
+	 */
 	public Float getHoverStrokeWeight() {
 		return hoverStrokeWeight;
 	}
 
+	/**
+	 * button position getter
+	 *
+	 * @return {@link #x} and {@link #y} as {@link PVector}
+	 */
 	public PVector getPos() {
 		return new PVector(x, y);
 	}

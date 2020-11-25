@@ -8,6 +8,22 @@ import processing.event.KeyEvent;
 public class Game extends Screen {
 	public static final Game instance = new Game();
 
+	public Modes currentMode = Modes.NORMAL;
+
+	public enum Modes {
+		EASY(0.01, Box::spawnStraight),
+		NORMAL(0.02, Box::spawn),
+		HARD(0.04, Box::spawn);
+
+		public Runnable spawnBox;
+		public double boxAcc;
+
+		Modes(double boxAcc, Runnable spawnBox) {
+			this.boxAcc = boxAcc;
+			this.spawnBox = spawnBox;
+		}
+	}
+
 	static {
 		screens.add(instance);
 	}
@@ -79,16 +95,6 @@ public class Game extends Screen {
 	public void draw() {
 		ScreenHandler.drawBackground(0);
 
-		/*Sketch.p.strokeWeight(0.2f);
-		Sketch.p.stroke(255);
-		Sketch.p.noFill();
-
-		for (int i = 0; i < p.width / Box.BOX_SIZE; i++) {
-			for (int j = 0; j < p.height / Box.BOX_SIZE; j++) {
-				p.rect(i * Box.BOX_SIZE, j * Box.BOX_SIZE, Box.BOX_SIZE, Box.BOX_SIZE);
-			}
-		}*/
-
 		for (int i = 0; i < Box.boxes.size(); i++) {
 			Box.boxes.get(i).show(Box.boxes.get(i) == first);
 		}
@@ -123,8 +129,8 @@ public class Game extends Screen {
 		stop();
 		spawnBoxThread = new Thread(() -> {
 			while (spawnBoxThread != null && !spawnBoxThread.isInterrupted()) {
-				Box.spawn();
-				Box.boxSpeed += 0.02;
+				currentMode.spawnBox.run();
+				Box.boxSpeed += currentMode.boxAcc;
 				try {
 					Thread.sleep((long) (1000 / Box.boxSpeed));
 				} catch (InterruptedException ignored) {

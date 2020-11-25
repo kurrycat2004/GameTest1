@@ -23,8 +23,9 @@ public class Menu extends Screen {
 		screens.add(instance);
 	}
 
-	private final Button startGame = new Button("Start Game", Sketch.p.width / 2 - 50, Sketch.p.height / 2 - 20, 200, 60).copyDesign(mainDesign);
-	private final Button settings = new Button("Settings", Sketch.p.width / 2 - 50, Sketch.p.height / 2 + 30, 200, 60).copyDesign(mainDesign);
+	private final Button startGame = new Button("Start Game", 0, 0, 200, 60).copyDesign(mainDesign);
+	private final Button mode = new Button("Select Mode", 0, 0, 200, 60).copyDesign(mainDesign);
+	private final Button settings = new Button("Settings", 0, 0, 200, 60).copyDesign(mainDesign);
 	private final Button help = new RoundButton("?", 0, 0, 15).copyDesign(mainDesign);
 
 	public Menu() {
@@ -32,6 +33,10 @@ public class Menu extends Screen {
 		startGame.setClickedCallback(() -> {
 			ScreenHandler.pushScreen(Game.instance);
 			Game.instance.start();
+		});
+
+		buttonList.add(mode);
+		mode.setClickedCallback(() -> {
 		});
 
 		buttonList.add(settings);
@@ -47,7 +52,8 @@ public class Menu extends Screen {
 
 	public void windowResized() {
 		startGame.setMiddleOffsetPos(0, Sketch.p.height / 16);
-		settings.setMiddleOffsetPos(0, Sketch.p.height / 16 + 80);
+		mode.setMiddleOffsetPos(0, Sketch.p.height / 16 + 80);
+		settings.setMiddleOffsetPos(0, Sketch.p.height / 16 + 160);
 		int titleWidth = Sketch.jframe.getFontMetrics(titleFont.getFont().deriveFont(Sketch.p.height / 6f)).stringWidth("ArrayKeys");
 		int titleHeight = Sketch.jframe.getFontMetrics(titleFont.getFont().deriveFont(Sketch.p.height / 6f)).getHeight();
 		help.setMiddleOffsetPos((int) (titleWidth / 2f + 10), (int) (-Sketch.p.height / 6f - titleHeight / 2f));

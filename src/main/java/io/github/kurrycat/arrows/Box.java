@@ -5,21 +5,50 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+/**
+ * Box class
+ */
 public class Box {
+	/**
+	 * Speed of all boxes
+	 */
 	public static float boxSpeed = 1f;
+	/**
+	 * ArrayList of all boxes
+	 */
 	public static final ArrayList<Box> boxes = new ArrayList<>();
+	/**
+	 * Size of all boxes
+	 */
 	public static short BOX_SIZE;
 
+	/**
+	 * Position of the box as {@link PVector}
+	 */
 	protected final PVector pos;
 
+	/**
+	 * Indicates whether the box is disabled
+	 */
 	protected boolean disabled = false;
 
+	/**
+	 * Direction the box is moving as {@link PVector}
+	 */
 	protected final PVector dir;
+
+	/**
+	 * The KEYS instance that should be drawn on screen and which is tested for when the user presses an arrow key
+	 */
 	protected final KEYS arr;
 
+	/**
+	 * Default constructor that just returns a new {@link Box} with a random direction and KEYS instance
+	 */
 	public Box() {
 		this(KEYS.values()[(int) Sketch.p.random(4)], KEYS.values()[(int) Sketch.p.random(8)]);
 	}
+
 
 	public Box(KEYS dir, KEYS arr) {
 		this.pos = getStartingPosFromDir(dir);
@@ -70,7 +99,7 @@ public class Box {
 
 	public boolean in(PVector pos, PVector size) {
 		return this.pos.x >= pos.x && this.pos.x <= pos.x + size.x && this.pos.y >= pos.y
-				       && this.pos.y <= pos.y + size.y;
+				&& this.pos.y <= pos.y + size.y;
 	}
 
 	public boolean in(int posX, int posY, int sizeX, int sizeY) {
@@ -103,6 +132,10 @@ public class Box {
 
 	public static void spawn() {
 		boxes.add(new Box());
+	}
+
+	public static void spawnStraight() {
+		boxes.add(new Box(KEYS.values()[(int) Sketch.p.random(4)], KEYS.randomStraight()));
 	}
 
 	public Box setPos(PVector pos) {

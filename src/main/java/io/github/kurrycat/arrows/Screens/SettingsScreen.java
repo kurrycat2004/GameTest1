@@ -9,7 +9,7 @@ public class SettingsScreen extends Screen {
 		screens.add(instance);
 	}
 
-	private final Button menu = Button.middleOffset("Settings", 0, 50, 100, 40).copyDesign(Menu.mainDesign);
+	private final Button menu = Button.middleOffset("Menu", 0, 50, 100, 40).copyDesign(Menu.mainDesign);
 
 	public SettingsScreen() {
 		buttonList.add(menu);
