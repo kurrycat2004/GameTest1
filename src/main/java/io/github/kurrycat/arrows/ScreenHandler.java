@@ -24,6 +24,8 @@ public class ScreenHandler {
 		s = GameOver.instance;
 		s = SettingsScreen.instance;
 		s = Help.instance;
+		s = Modes.instance;
+		s = Pause.instance;
 	}
 
 	/**
@@ -81,6 +83,7 @@ public class ScreenHandler {
 	public static void drawCurrentScreen() {
 		if (alpha < 255 && beforeScreen != null) beforeScreen.draw();
 		currentScreen.draw();
+		if (Settings.showFPS) showFPS();
 	}
 
 	/**
@@ -156,5 +159,15 @@ public class ScreenHandler {
 			if (s.x < 0 || s.x > Sketch.p.width + 100 || s.y < 0 || s.y > Sketch.p.height)
 				backgroundArrows.remove(i);
 		}
+	}
+
+	/**
+	 * Draws the current FPS on screen.
+	 */
+	public static void showFPS() {
+		Sketch.p.fill(255);
+		Sketch.p.textFont(Game.scoreFont);
+		Sketch.p.textSize(Box.BOX_SIZE / 3f);
+		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
 	}
 }

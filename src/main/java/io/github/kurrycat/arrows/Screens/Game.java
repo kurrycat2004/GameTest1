@@ -8,8 +8,6 @@ import processing.event.KeyEvent;
 public class Game extends Screen {
 	public static final Game instance = new Game();
 
-	public Modes currentMode = Modes.NORMAL;
-
 	public enum Modes {
 		EASY(0.01, Box::spawnStraight),
 		NORMAL(0.02, Box::spawn),
@@ -31,19 +29,19 @@ public class Game extends Screen {
 	public static final PFont scoreFont = new PFont(PFont.findFont("DejaVu Sans Mono"), true);
 
 	public int score = 0;
-	public int highscore = 0;
 	public int roundHighscore = 0;
+
+	public boolean paused = false;
 
 	public Box first;
 	public Thread spawnBoxThread;
 
-	Game() {
-
-	}
-
 	@Override
 	public void handleKeyEvent(KeyEvent e) {
-
+		if (e.getAction() == 1 && e.getKey() == 27) {
+			paused = true;
+			ScreenHandler.pushScreen(Pause.instance);
+		}
 	}
 
 	public void start() {
@@ -53,7 +51,7 @@ public class Game extends Screen {
 
 	public void update() {
 		if (score <= roundHighscore - 5) {
-			stop();
+			spawnBoxThread = null;
 			ScreenHandler.pushScreen(GameOver.instance);
 		}
 		//ArrowKeys
@@ -75,7 +73,13 @@ public class Game extends Screen {
 			}
 		}
 
-		highscore = PApplet.max(score, highscore);
+		if (Settings.currentMode == Modes.EASY)
+			Settings.easyHighscore = PApplet.max(score, Settings.easyHighscore);
+		else if (Settings.currentMode == Modes.NORMAL)
+			Settings.normalHighscore = PApplet.max(score, Settings.normalHighscore);
+		else if (Settings.currentMode == Modes.HARD)
+			Settings.hardHighscore = PApplet.max(score, Settings.hardHighscore);
+
 		roundHighscore = PApplet.max(score, roundHighscore);
 
 		for (int i = 0; i < Box.boxes.size(); i++) {
@@ -93,6 +97,11 @@ public class Game extends Screen {
 	}
 
 	public void draw() {
+		int highscore = 0;
+		if (Settings.currentMode == Modes.EASY) highscore = Settings.easyHighscore;
+		else if (Settings.currentMode == Modes.NORMAL) highscore = Settings.normalHighscore;
+		else if (Settings.currentMode == Modes.HARD) highscore = Settings.hardHighscore;
+
 		ScreenHandler.drawBackground(0);
 
 		for (int i = 0; i < Box.boxes.size(); i++) {
@@ -102,14 +111,7 @@ public class Game extends Screen {
 		Sketch.p.fill(255);
 
 		Sketch.p.textFont(scoreFont);
-
 		Sketch.p.textSize(Box.BOX_SIZE / 3f);
-
-		if (Settings.showFPS)
-			Sketch.p.showFPS();
-
-		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
-		Sketch.p.text(Box.boxSpeed, Box.BOX_SIZE, Box.BOX_SIZE);
 
 		Sketch.p.textSize(Box.BOX_SIZE / 2f);
 		Sketch.p.text(score, Sketch.p.width / 2f, Box.BOX_SIZE);
@@ -117,26 +119,41 @@ public class Game extends Screen {
 		Sketch.p.fill(100, 255, 100);
 		Sketch.p.textSize(Box.BOX_SIZE / 3f);
 		Sketch.p.text(highscore, Sketch.p.width / 2f, Box.BOX_SIZE / 2f);
+
+		if (Settings.showBoxSpeed) {
+			Sketch.p.textFont(scoreFont);
+			Sketch.p.textSize(Box.BOX_SIZE / 3f);
+			Sketch.p.text(Box.boxSpeed, Box.BOX_SIZE, Box.BOX_SIZE);
+		}
 	}
 
-	public void stop() {
-		if (spawnBoxThread != null)
-			spawnBoxThread.interrupt();
-		spawnBoxThread = null;
+	public void newSpawnBoxThread() {
+		spawnBoxThread = new Thread() {
+			@Override
+			public void run() {
+				while (spawnBoxThread != null && getId() == spawnBoxThread.getId()) {
+					if (paused) {
+						try {
+							Thread.sleep((long) (1000 / Box.boxSpeed));
+						} catch (InterruptedException ignored) {
+						}
+						continue;
+					}
+					Settings.currentMode.spawnBox.run();
+					Box.boxSpeed += Settings.currentMode.boxAcc;
+					try {
+						Thread.sleep((long) (1000 / Box.boxSpeed));
+					} catch (InterruptedException ignored) {
+					}
+				}
+				System.out.println("Finished Thread: " + getId());
+			}
+		};
 	}
 
 	public void reset() {
-		stop();
-		spawnBoxThread = new Thread(() -> {
-			while (spawnBoxThread != null && !spawnBoxThread.isInterrupted()) {
-				currentMode.spawnBox.run();
-				Box.boxSpeed += currentMode.boxAcc;
-				try {
-					Thread.sleep((long) (1000 / Box.boxSpeed));
-				} catch (InterruptedException ignored) {
-				}
-			}
-		});
+		paused = false;
+		newSpawnBoxThread();
 		first = null;
 		Box.boxes.clear();
 		score = 0;

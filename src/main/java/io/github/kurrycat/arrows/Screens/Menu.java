@@ -11,10 +11,10 @@ public class Menu extends Screen {
 	 * static main Button design
 	 */
 	public static final Button mainDesign = new Button("", 0, 0, 0, 0)
-			.setBgColor(255)
-			.setHoverBgColor(null)
-			.setTextColor(0)
-			.setHoverTextColor(255);
+			                                        .setBgColor(255)
+			                                        .setHoverBgColor(null)
+			                                        .setTextColor(0)
+			                                        .setHoverTextColor(255);
 
 	public static final Menu instance = new Menu();
 	public static final PFont titleFont = new PFont(PFont.findFont("Bookman Old Style Fett Kursiv"), true);
@@ -37,6 +37,7 @@ public class Menu extends Screen {
 
 		buttonList.add(mode);
 		mode.setClickedCallback(() -> {
+			ScreenHandler.pushScreen(Modes.instance);
 		});
 
 		buttonList.add(settings);
@@ -85,11 +86,14 @@ public class Menu extends Screen {
 		Sketch.p.text("ArrowKeys", Sketch.p.width / 2f, Sketch.p.height / 2f - Sketch.p.height / 4f);
 
 		Sketch.p.textSize(Sketch.p.height / 18f);
-		Sketch.p.text("Highscore: " + Game.instance.highscore, Sketch.p.width / 2f, Sketch.p.height / 2f - Sketch.p.height / 12f);
 
-		if (Settings.showFPS)
-			Sketch.p.showFPS();
+		int highscore = 0;
+		if (Settings.currentMode == Game.Modes.EASY) highscore = Settings.easyHighscore;
+		else if (Settings.currentMode == Game.Modes.NORMAL) highscore = Settings.normalHighscore;
+		else if (Settings.currentMode == Game.Modes.HARD) highscore = Settings.hardHighscore;
 
+		Sketch.p.text("Highscore: " + highscore, Sketch.p.width / 2f, Sketch.p.height / 2f - Sketch.p.height / 12f);
+		
 		drawButtons();
 	}
 

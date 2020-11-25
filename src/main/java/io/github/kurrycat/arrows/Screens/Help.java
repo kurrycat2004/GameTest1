@@ -37,7 +37,7 @@ public class Help extends Screen {
 	private final ArrayList<Box> arrows = new ArrayList<>();
 	private final ArrayList<OffsetDateTime> times = new ArrayList<>();
 
-	private static final int highlightColor = 180;
+	private static final int highlightColor = 130;
 
 	static {
 		screens.add(instance);
@@ -126,7 +126,7 @@ public class Help extends Screen {
 
 		double average = 0;
 		ArrayList<Long> timeDiffs = getTimesDifferences();
-		for (int i = 0; i < timeDiffs.size(); i++) {
+		for (int i = timeDiffs.size() - 1; i >= 0; i--) {
 			average += timeDiffs.get(i);
 
 			float x = xOff + (i / 5 == 0 ? -Box.BOX_SIZE : Box.BOX_SIZE);
@@ -144,7 +144,7 @@ public class Help extends Screen {
 		Sketch.p.text("Average of 10: " + avg, xOff, yOff + Box.BOX_SIZE * 3f);
 
 		Sketch.p.textSize(Box.BOX_SIZE / 3.5f);
-		Sketch.p.text("PB: " + String.format(Locale.US, "%.1f", Settings.average), xOff, yOff + Box.BOX_SIZE * 3.5f);
+		Sketch.p.text("PB: " + String.format(Locale.US, "%.1f", Settings.average) + "ms", xOff, yOff + Box.BOX_SIZE * 3.5f);
 
 
 		KEYS currKey = arrows.get(arrows.size() - 1).getArr();
@@ -166,8 +166,6 @@ public class Help extends Screen {
 		arrowRight.draw();
 
 		currentArrowButton.draw();
-
-		if (Settings.showFPS) Sketch.p.showFPS();
 	}
 
 	public void update() {

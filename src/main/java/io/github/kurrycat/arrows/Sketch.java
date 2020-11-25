@@ -1,6 +1,5 @@
 package io.github.kurrycat.arrows;
 
-import io.github.kurrycat.arrows.Screens.Game;
 import io.github.kurrycat.arrows.Screens.Menu;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
@@ -129,16 +128,6 @@ public class Sketch extends PApplet {
 	 */
 	public void draw() {
 		ScreenHandler.drawCurrentScreen();
-	}
-
-	/**
-	 * Draws the current FPS on screen.
-	 */
-	public void showFPS() {
-		Sketch.p.fill(255);
-		Sketch.p.textFont(Game.scoreFont);
-		Sketch.p.textSize(Box.BOX_SIZE / 3f);
-		Sketch.p.text(Sketch.p.frameRate, Box.BOX_SIZE, Box.BOX_SIZE / 3f);
 	}
 
 	/**

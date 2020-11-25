@@ -1,6 +1,5 @@
 package io.github.kurrycat.arrows;
 
-import io.github.kurrycat.arrows.Screens.Game;
 import processing.data.JSONObject;
 
 import java.io.*;
@@ -73,13 +72,20 @@ public class ConfigHandler {
 	 */
 	public static void loadConfig() {
 		if (config == null) return;
-		Game.instance.highscore = config.getInt("highscore", 0);
 		try {
 			Field[] fields = Settings.class.getDeclaredFields();
 			for (Field field : fields) {
 				Object value = config.get(field.getName());
-				if (value == null) value = field.get(Settings.class);
-				field.set(Settings.class, value);
+				if (value == null) continue;
+				if (field.getType().isEnum()) {
+					Object[] constants = field.getType().getEnumConstants();
+					for (Object constant : constants) {
+						if (constant.toString().equals(value)) {
+							field.set(Settings.class, constant);
+						}
+					}
+				} else
+					field.set(Settings.class, value);
 			}
 		} catch (IllegalAccessException ignored) {
 		}
@@ -90,7 +96,6 @@ public class ConfigHandler {
 	 */
 	public static void saveConfig() {
 		if (config == null) return;
-		config.setInt("highscore", Game.instance.highscore);
 
 		try {
 			Field[] fields = Settings.class.getDeclaredFields();
