@@ -18,13 +18,34 @@ public class Game extends Screen {
 	 * Enum containing the different Game modes with every game mode having a different {@link Modes#boxAcc} and {@link Modes#spawnBox}
 	 */
 	public enum Modes {
+		/**
+		 * Easy Mode
+		 */
 		EASY(0.01, Box::spawnStraight),
+		/**
+		 * Normal Mode
+		 */
 		NORMAL(0.02, Box::spawn),
+		/**
+		 * Hard Mode
+		 */
 		HARD(0.04, Box::spawn);
 
+		/**
+		 * The method that is executed to spawn a new {@link Box}
+		 */
 		public Runnable spawnBox;
+		/**
+		 * The amount {@link Box#boxSpeed} should be increased every time a new {@link Box} spawns
+		 */
 		public double boxAcc;
 
+		/**
+		 * Enum constructor
+		 *
+		 * @param boxAcc   amount {@link Box#boxSpeed} should be increased every time a new {@link Box} spawns
+		 * @param spawnBox method that is executed to spawn a new {@link Box}
+		 */
 		Modes(double boxAcc, Runnable spawnBox) {
 			this.boxAcc = boxAcc;
 			this.spawnBox = spawnBox;
@@ -194,6 +215,9 @@ public class Game extends Screen {
 		};
 	}
 
+	/**
+	 * Resets the Game screen
+	 */
 	public void reset() {
 		paused = false;
 		newSpawnBoxThread();
@@ -205,16 +229,27 @@ public class Game extends Screen {
 		KEYS.nextMoveKeys.clear();
 	}
 
+	/**
+	 * Empty window resized event handler
+	 */
 	@Override
 	public void windowResized() {
 
 	}
 
+	/**
+	 * Empty init event handler
+	 */
 	@Override
 	public void init() {
 
 	}
 
+	/**
+	 * Empty keyPressed event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyPressed(int keyCode) {
 		KEYS k = KEYS.fromKeyCode(keyCode);
 		if (!KEYS.keysPressed.contains(k))
@@ -223,6 +258,11 @@ public class Game extends Screen {
 			KEYS.nextMoveKeys.add(k);
 	}
 
+	/**
+	 * Empty keyReleased event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyReleased(int keyCode) {
 		KEYS k = KEYS.fromKeyCode(keyCode);
 		KEYS.keysPressed.remove(k);

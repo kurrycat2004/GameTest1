@@ -10,13 +10,37 @@ import java.util.ArrayList;
  * KEYS enum with all 8 arrow directions
  */
 public enum KEYS {
+	/**
+	 * Arrow Up instance
+	 */
 	ARROW_UP(new int[]{38}, new PVector(0f, -1f)),
+	/**
+	 * Arrow Down instance
+	 */
 	ARROW_DOWN(new int[]{40}, new PVector(0f, 1f)),
+	/**
+	 * Arrow Left instance
+	 */
 	ARROW_LEFT(new int[]{37}, new PVector(-1f, 0f)),
+	/**
+	 * Arrow Right instance
+	 */
 	ARROW_RIGHT(new int[]{39}, new PVector(1f, 0f)),
+	/**
+	 * Arrow Up Right instance
+	 */
 	ARROW_UP_RIGHT(new int[]{38, 39}, new PVector(1f, -1f)),
+	/**
+	 * Arrow Up Left instance
+	 */
 	ARROW_UP_LEFT(new int[]{38, 37}, new PVector(-1f, -1f)),
+	/**
+	 * Arrow Down Right instance
+	 */
 	ARROW_DOWN_RIGHT(new int[]{40, 39}, new PVector(1f, 1f)),
+	/**
+	 * Arrow Down Left instance
+	 */
 	ARROW_DOWN_LEFT(new int[]{40, 37}, new PVector(-1f, 1f));
 
 	/**
@@ -41,6 +65,12 @@ public enum KEYS {
 	 */
 	public PShape shape;
 
+	/**
+	 * {@link KEYS} constructor
+	 *
+	 * @param keyCode int array containing the keyCodes
+	 * @param dir     the direction of the arrow
+	 */
 	KEYS(int[] keyCode, PVector dir) {
 		this.keyCode = keyCode;
 		this.dir = dir;

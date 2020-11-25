@@ -8,8 +8,14 @@ import java.util.ArrayList;
  * Abstract Screen class that every screen extends from.
  */
 public abstract class Screen {
+	/**
+	 * {@link Screen} {@link ArrayList} containing all screens
+	 */
 	protected static ArrayList<Screen> screens = new ArrayList<>();
 
+	/**
+	 * {@link Button} {@link ArrayList} containing all buttons on a screen
+	 */
 	public ArrayList<Button> buttonList = new ArrayList<>();
 
 	/**

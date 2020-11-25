@@ -8,11 +8,26 @@ import java.util.ArrayList;
  * ScreenHandler class that handles the different {@link Screen} subclasses.
  */
 public class ScreenHandler {
+	/**
+	 * Last screen
+	 */
 	private static Screen beforeScreen;
+	/**
+	 * Current screen
+	 */
 	private static Screen currentScreen;
+	/**
+	 * {@link ArrayList} containing a history of all the screens opened
+	 */
 	private static final ArrayList<Screen> history = new ArrayList<>();
+	/**
+	 * Alpha value for transitions
+	 */
 	private static int alpha = 255;
 
+	/**
+	 * {@link ArrayList} containing all {@link BackgroundArrow} instances
+	 */
 	public static ArrayList<BackgroundArrow> backgroundArrows = new ArrayList<>();
 
 	/**

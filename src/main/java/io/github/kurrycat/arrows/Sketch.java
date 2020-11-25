@@ -14,10 +14,22 @@ import java.util.TimerTask;
  * Sketch class that extends {@link PApplet} so that it can be executed as a processing sketch.
  */
 public class Sketch extends PApplet {
+	/**
+	 * The sketch
+	 */
 	public static Sketch p = new Sketch();
+	/**
+	 * The window width
+	 */
 	public static int windowWidth;
+	/**
+	 * The window height
+	 */
 	public static int windowHeight;
 
+	/**
+	 * The {@link JFrame} instance
+	 */
 	public static JFrame jframe;
 
 	/**
@@ -162,7 +174,7 @@ public class Sketch extends PApplet {
 	/**
 	 * Main method just executes the Sketch.
 	 *
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		String[] processingArgs = {"io.github.kurrycat.arrows.Sketch"};
