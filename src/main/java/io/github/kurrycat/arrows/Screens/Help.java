@@ -10,39 +10,78 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+/**
+ * Help screen extends {@link Screen}
+ */
 public class Help extends Screen {
+	/**
+	 * Screen instance
+	 */
 	public static final Help instance = new Help();
 
+	/**
+	 * Menu button
+	 */
 	private final Button menu = new Button("Menu", 0, 0, 160, 50).copyDesign(Menu.mainDesign);
+	/**
+	 * Start Game button
+	 */
 	private final Button startGame = new Button("Start Game", 0, 0, 160, 50).copyDesign(Menu.mainDesign);
 
+	/**
+	 * Arrow up keystroke
+	 */
 	private final Button arrowUp = new Button(0, 0, 0, 0)
 			                               .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_UP))
 			                               .copyDesign(Menu.mainDesign);
+	/**
+	 * Arrow down keystroke
+	 */
 	private final Button arrowDown = new Button(0, 0, 0, 0)
 			                                 .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_DOWN))
 			                                 .copyDesign(Menu.mainDesign);
+	/**
+	 * Arrow left keystroke
+	 */
 	private final Button arrowLeft = new Button(0, 0, 0, 0)
 			                                 .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_LEFT))
 			                                 .copyDesign(Menu.mainDesign);
+	/**
+	 * Arrow right keystroke
+	 */
 	private final Button arrowRight = new Button(0, 0, 0, 0)
 			                                  .setHoverMethod(() -> KEYS.keysPressed.contains(KEYS.ARROW_RIGHT))
 			                                  .copyDesign(Menu.mainDesign);
 
+	/**
+	 * Current arrow button
+	 */
 	private final Button currentArrowButton = new Button(0, 0, 0, 0)
 			                                          .setHoverMethod(() -> false)
 			                                          .copyDesign(Menu.mainDesign)
 			                                          .setBgColor(Sketch.p.color(50, 200, 50));
 
+	/**
+	 * ArrayList containing all arrows on screen
+	 */
 	private final ArrayList<Box> arrows = new ArrayList<>();
+	/**
+	 * ArrayList containing the last 10 {@link OffsetDateTime} instances when the user pressed to correct key arrows
+	 */
 	private final ArrayList<OffsetDateTime> times = new ArrayList<>();
 
+	/**
+	 * Color of the highlighted arrow keystrokes
+	 */
 	private static final int highlightColor = 130;
 
 	static {
 		screens.add(instance);
 	}
 
+	/**
+	 * Initializes all button clicked callbacks
+	 */
 	public Help() {
 		buttonList.add(menu);
 		menu.setClickedCallback(() -> {
@@ -56,6 +95,10 @@ public class Help extends Screen {
 		});
 	}
 
+	/**
+	 * Window resized event handler
+	 * Repositions all the buttons based on the new screen size
+	 */
 	public void windowResized() {
 		menu.setMiddleOffsetPos(0, Sketch.p.height / 4);
 		startGame.setMiddleOffsetPos(0, Sketch.p.height / 4 + 60);
@@ -84,12 +127,18 @@ public class Help extends Screen {
 		}
 	}
 
+	/**
+	 * Init event handler that clears {@link #arrows} and {@link #times} and calls {@link #newArrow()}
+	 */
 	public void init() {
 		arrows.clear();
 		times.clear();
 		newArrow();
 	}
 
+	/**
+	 * Adds a new random arrow to {@link #arrows}
+	 */
 	public void newArrow() {
 		KEYS newKey = KEYS.random();
 		Box newArrow = new Box(newKey, newKey, currentArrowButton.getPos()) {
@@ -102,14 +151,27 @@ public class Help extends Screen {
 		arrows.add(newArrow);
 	}
 
+	/**
+	 * Empty keyPressed event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyPressed(int keyCode) {
 
 	}
 
+	/**
+	 * Empty keyReleased event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyReleased(int keyCode) {
 
 	}
 
+	/**
+	 * Calls {@link ScreenHandler#drawBackground(int color)} and {@link ScreenHandler#drawArrows()} and draws the times and keystrokes on screen
+	 */
 	public void draw() {
 		ScreenHandler.drawBackground(0);
 		ScreenHandler.drawArrows();
@@ -168,6 +230,9 @@ public class Help extends Screen {
 		currentArrowButton.draw();
 	}
 
+	/**
+	 * Calls {@link #updateButtons()} and {@link ScreenHandler#updateArrows()} and updates the keystrokes and {@link #times}
+	 */
 	public void update() {
 		updateButtons();
 		ScreenHandler.updateArrows();
@@ -194,6 +259,11 @@ public class Help extends Screen {
 			times.remove(0);
 	}
 
+	/**
+	 * Calculates the time difference between all {@link OffsetDateTime} instances in {@link #times}
+	 *
+	 * @return the ArrayList containing the time difference in ms
+	 */
 	public ArrayList<Long> getTimesDifferences() {
 		ArrayList<Long> timeDiffs = new ArrayList<>();
 

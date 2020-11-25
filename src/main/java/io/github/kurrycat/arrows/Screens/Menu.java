@@ -16,18 +16,39 @@ public class Menu extends Screen {
 			                                        .setTextColor(0)
 			                                        .setHoverTextColor(255);
 
+	/**
+	 * Screen instance
+	 */
 	public static final Menu instance = new Menu();
+	/**
+	 * Title font {@link PFont} instance
+	 */
 	public static final PFont titleFont = new PFont(PFont.findFont("Bookman Old Style Fett Kursiv"), true);
 
 	static {
 		screens.add(instance);
 	}
 
+	/**
+	 * Start Game button
+	 */
 	private final Button startGame = new Button("Start Game", 0, 0, 200, 60).copyDesign(mainDesign);
+	/**
+	 * Select Mode button
+	 */
 	private final Button mode = new Button("Select Mode", 0, 0, 200, 60).copyDesign(mainDesign);
+	/**
+	 * Settings button
+	 */
 	private final Button settings = new Button("Settings", 0, 0, 200, 60).copyDesign(mainDesign);
+	/**
+	 * Help button
+	 */
 	private final Button help = new RoundButton("?", 0, 0, 15).copyDesign(mainDesign);
 
+	/**
+	 * Initializes all button clicked callbacks
+	 */
 	public Menu() {
 		buttonList.add(startGame);
 		startGame.setClickedCallback(() -> {
@@ -51,6 +72,9 @@ public class Menu extends Screen {
 		});
 	}
 
+	/**
+	 * Window resized event
+	 */
 	public void windowResized() {
 		startGame.setMiddleOffsetPos(0, Sketch.p.height / 16);
 		mode.setMiddleOffsetPos(0, Sketch.p.height / 16 + 80);
@@ -60,18 +84,34 @@ public class Menu extends Screen {
 		help.setMiddleOffsetPos((int) (titleWidth / 2f + 10), (int) (-Sketch.p.height / 6f - titleHeight / 2f));
 	}
 
+	/**
+	 * Empty init event handler
+	 */
 	public void init() {
 
 	}
 
+	/**
+	 * Empty keyPressed event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyPressed(int keyCode) {
 
 	}
 
+	/**
+	 * Empty keyReleased event handler
+	 *
+	 * @param keyCode keyCode of the key that got pressed
+	 */
 	public void keyReleased(int keyCode) {
 
 	}
 
+	/**
+	 * Calls {@link ScreenHandler#drawBackground(int color)}, {@link ScreenHandler#drawArrows()}, draws the logo and highscore and calls {@link #drawButtons()}
+	 */
 	public void draw() {
 		ScreenHandler.drawBackground(0);
 
@@ -93,10 +133,13 @@ public class Menu extends Screen {
 		else if (Settings.currentMode == Game.Modes.HARD) highscore = Settings.hardHighscore;
 
 		Sketch.p.text("Highscore: " + highscore, Sketch.p.width / 2f, Sketch.p.height / 2f - Sketch.p.height / 12f);
-		
+
 		drawButtons();
 	}
 
+	/**
+	 * Calls {@link #updateButtons()} and {@link ScreenHandler#updateArrows()}
+	 */
 	public void update() {
 		updateButtons();
 		ScreenHandler.updateArrows();

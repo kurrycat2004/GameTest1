@@ -5,9 +5,18 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.event.KeyEvent;
 
+/**
+ * Game screen extends {@link Screen}
+ */
 public class Game extends Screen {
+	/**
+	 * Screen instance
+	 */
 	public static final Game instance = new Game();
 
+	/**
+	 * Enum containing the different Game modes with every game mode having a different {@link Modes#boxAcc} and {@link Modes#spawnBox}
+	 */
 	public enum Modes {
 		EASY(0.01, Box::spawnStraight),
 		NORMAL(0.02, Box::spawn),
@@ -26,16 +35,39 @@ public class Game extends Screen {
 		screens.add(instance);
 	}
 
+	/**
+	 * Score {@link PFont} instance
+	 */
 	public static final PFont scoreFont = new PFont(PFont.findFont("DejaVu Sans Mono"), true);
 
+	/**
+	 * Current score
+	 */
 	public int score = 0;
+	/**
+	 * Round highscore
+	 */
 	public int roundHighscore = 0;
 
+	/**
+	 * Boolean indicating whether the game is paused
+	 */
 	public boolean paused = false;
 
+	/**
+	 * First/green {@link Box}
+	 */
 	public Box first;
+	/**
+	 * {@link Thread} spawning a box every {@code 1000/}{@link Box#boxSpeed} ms
+	 */
 	public Thread spawnBoxThread;
 
+	/**
+	 * Key event handler pausing the game if the user presses escape
+	 *
+	 * @param e The KeyEvent
+	 */
 	@Override
 	public void handleKeyEvent(KeyEvent e) {
 		if (e.getAction() == 1 && e.getKey() == 27) {
@@ -44,17 +76,22 @@ public class Game extends Screen {
 		}
 	}
 
+	/**
+	 * Calls {@link #reset()} and {@link #spawnBoxThread start()}
+	 */
 	public void start() {
 		reset();
 		spawnBoxThread.start();
 	}
 
+	/**
+	 * Updates all {@link Box#boxes} and the highscores and removes all {@link Box#boxes} off screen
+	 */
 	public void update() {
 		if (score <= roundHighscore - 5) {
 			spawnBoxThread = null;
 			ScreenHandler.pushScreen(GameOver.instance);
 		}
-		//ArrowKeys
 
 		if (first == null || first.isDisabled()) first = Box.getFirstBox();
 
@@ -96,6 +133,9 @@ public class Game extends Screen {
 		}
 	}
 
+	/**
+	 * Calls {@link ScreenHandler#drawBackground(int color)}, draws all {@link Box#boxes} and draws {@link #score} on screen
+	 */
 	public void draw() {
 		int highscore = 0;
 		if (Settings.currentMode == Modes.EASY) highscore = Settings.easyHighscore;
@@ -127,6 +167,9 @@ public class Game extends Screen {
 		}
 	}
 
+	/**
+	 * Creates a new {@link #spawnBoxThread} that overwrites the old one if there is any
+	 */
 	public void newSpawnBoxThread() {
 		spawnBoxThread = new Thread() {
 			@Override
